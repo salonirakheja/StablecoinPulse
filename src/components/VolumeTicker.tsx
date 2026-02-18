@@ -327,6 +327,16 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
                   </p>
                 </div>
 
+                <div className="p-3 rounded-lg border border-[rgba(0,245,255,0.1)]"
+                  style={{ background: 'rgba(0,245,255,0.03)' }}>
+                  <h3 className="text-[10px] tracking-widest text-[#E0E0FF] uppercase mb-1">
+                    Volume vs. Regulation
+                  </h3>
+                  <p>
+                    High trading volume in restricted countries is common. Bans often drive usage underground via <span className="text-[#E0E0FF]">P2P and OTC markets</span> rather than eliminating it. Countries like China, Russia, and Nigeria rank among the highest in stablecoin volume despite official restrictions — people need stablecoins to bypass broken banking systems, capital controls, or inflation.
+                  </p>
+                </div>
+
                 <div className="p-3 rounded-lg border border-[rgba(255,184,0,0.15)]"
                   style={{ background: 'rgba(255,184,0,0.04)' }}>
                   <h3 className="text-[10px] tracking-widest text-[#FFB800] uppercase mb-1">
