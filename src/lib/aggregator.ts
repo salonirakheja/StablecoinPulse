@@ -19,6 +19,7 @@ interface CountryAccumulator {
   exchangeCount: number;
   topExchange: string;
   topExchangeVolume: number;
+  topExchangeTrust: number;
 }
 
 function addToCountryMap(
@@ -26,14 +27,19 @@ function addToCountryMap(
   country: string,
   volumeBtc: number,
   exchangeName: string,
+  trustScore: number,
 ) {
   const existing = map.get(country);
   if (existing) {
     existing.volumeBtc += volumeBtc;
     existing.exchangeCount++;
-    if (volumeBtc > existing.topExchangeVolume) {
+    // Prefer higher-trust exchanges for display name, then volume as tiebreaker
+    const isBetterTrust = trustScore > existing.topExchangeTrust;
+    const isSameTrustMoreVolume = trustScore === existing.topExchangeTrust && volumeBtc > existing.topExchangeVolume;
+    if (isBetterTrust || isSameTrustMoreVolume) {
       existing.topExchange = exchangeName;
       existing.topExchangeVolume = volumeBtc;
+      existing.topExchangeTrust = trustScore;
     }
   } else {
     map.set(country, {
@@ -41,6 +47,7 @@ function addToCountryMap(
       exchangeCount: 1,
       topExchange: exchangeName,
       topExchangeVolume: volumeBtc,
+      topExchangeTrust: trustScore,
     });
   }
 }
@@ -73,6 +80,8 @@ export function aggregateByCountry(
     // Check if this exchange should be redistributed
     const redistribution = GLOBAL_EXCHANGE_REDISTRIBUTION[exchange.id];
 
+    const trust = exchange.trust_score ?? 0;
+
     if (redistribution) {
       // Global exchange: distribute volume to user countries
       redistributedBtc += exchange.trade_volume_24h_btc;
@@ -82,6 +91,7 @@ export function aggregateByCountry(
           country,
           exchange.trade_volume_24h_btc * share,
           exchange.name,
+          trust,
         );
       }
     } else if (TAX_HAVEN_COUNTRIES.has(registeredCountry)) {
@@ -93,6 +103,7 @@ export function aggregateByCountry(
           country,
           exchange.trade_volume_24h_btc * share,
           exchange.name,
+          trust,
         );
       }
     } else {
@@ -103,6 +114,7 @@ export function aggregateByCountry(
         registeredCountry,
         exchange.trade_volume_24h_btc,
         exchange.name,
+        trust,
       );
     }
   }
