@@ -23,7 +23,6 @@ body {
   background: var(--color-bg);
   color: #E0E0FF;
   font-family: var(--font-sans), system-ui, sans-serif;
-  overflow: hidden;
 }
 
 /* Mapbox overrides */
