@@ -155,12 +155,14 @@ export default function AboutPage() {
               adoption patterns. Tax-haven exchanges are redistributed to actual user countries for accuracy.
             </HoverCard>
           </div>
-          <p className="text-xs text-[#7070AA] leading-relaxed max-w-2xl mt-4 italic">
-            Note: Volume reflects where stablecoin trades are executed, not where demand originates.
-            Countries with major exchanges (e.g. the US with Coinbase and Kraken) rank high because
-            institutional trading, arbitrage, and DeFi activity flow through their platforms — even though
-            actual stablecoin adoption as a dollar substitute is strongest in emerging markets with
-            currency instability.
+          <p className="text-sm text-[#B0B0DD] leading-relaxed max-w-2xl mt-5">
+            We pull real-time 24h spot trading volume for USDT, USDC, and DAI from CoinGecko, map each
+            exchange to a country, and redistribute global exchanges across countries based on web traffic
+            and app usage patterns. The result is an estimate of where stablecoin trades are executing
+            right now — not where demand originates.
+          </p>
+          <p className="text-xs text-[#7070AA] leading-relaxed max-w-2xl mt-2 italic">
+            See &ldquo;Methodology &amp; Limitations&rdquo; below for the full pipeline and known limitations.
           </p>
         </section>
 
@@ -212,33 +214,95 @@ export default function AboutPage() {
 
         <SectionDivider />
 
-        {/* Disclaimer (collapsible) */}
+        {/* Methodology & Limitations (collapsible) */}
         <section>
-          <Collapsible title="Disclaimer">
+          <Collapsible title="Methodology & Limitations">
             <div
-              className="rounded-xl border border-[rgba(255,255,255,0.06)] backdrop-blur-md px-5 py-4 text-xs text-[#7070AA] leading-relaxed space-y-2 max-w-2xl"
+              className="rounded-xl border border-[rgba(255,255,255,0.06)] backdrop-blur-md px-5 py-5 text-xs text-[#7070AA] leading-relaxed max-w-2xl space-y-5"
               style={{ background: 'rgba(5, 5, 25, 0.6)' }}
             >
-              <p>
-                This tool is for informational and educational purposes only. It does not constitute financial,
-                legal, or investment advice.
-              </p>
-              <p>
-                Data refreshes approximately every 15 minutes. Volume figures are estimates based on available
-                exchange and on-chain data and may not capture all activity.
-              </p>
-              <p>
-                Volume represents where stablecoin trades are executed, not necessarily where demand originates.
-                For global exchanges (Binance, Coinbase, Kraken, OKX, Crypto.com, etc.), trading volume is
-                redistributed across countries using estimated user demographics based on Chainalysis adoption
-                data, company reports, and web traffic patterns. For regional exchanges with predominantly
-                local user bases (Upbit, WazirX, Paribu, etc.), volume is attributed to their home country.
-                This is an estimation model — actual user geography may differ from these approximations.
-              </p>
-              <p>
-                Regulation statuses are based on publicly available information and are subject to change.
-                Always verify current regulations through official government sources before making decisions.
-              </p>
+              {/* Volume Pipeline */}
+              <div>
+                <p className="text-[10px] font-mono tracking-[0.15em] text-[#E0E0FF] uppercase mb-2">Volume Pipeline</p>
+                <p>
+                  &ldquo;Volume&rdquo; means 24-hour spot trading volume for USDT, USDC, and DAI pairs, pulled from
+                  CoinGecko&apos;s exchange API. Each exchange is mapped to a country, and the volume is
+                  attributed based on the exchange type (see below). On-chain supply data from DefiLlama
+                  provides market caps and chain-level breakdowns. Data refreshes approximately every 15 minutes.
+                </p>
+              </div>
+
+              {/* Country Attribution */}
+              <div>
+                <p className="text-[10px] font-mono tracking-[0.15em] text-[#E0E0FF] uppercase mb-2">Country Attribution</p>
+                <p className="mb-2">Exchanges fall into three categories:</p>
+                <ul className="space-y-1.5 ml-3">
+                  <li className="flex gap-2">
+                    <span className="text-[#00F5FF] shrink-0">&bull;</span>
+                    <span>
+                      <strong className="text-[#B0B0DD]">Regional exchanges</strong> (Upbit, WazirX, Paribu, Mercado Bitcoin, etc.)
+                      — 100% of volume attributed to home country. These exchanges serve predominantly local
+                      users trading in local currency pairs.
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#00F5FF] shrink-0">&bull;</span>
+                    <span>
+                      <strong className="text-[#B0B0DD]">Global exchanges</strong> (Coinbase, Kraken, Crypto.com, Bitstamp)
+                      — volume redistributed across countries based on estimated web traffic and app usage
+                      patterns from public sources (SimilarWeb, company reports, app store rankings).
+                    </span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#00F5FF] shrink-0">&bull;</span>
+                    <span>
+                      <strong className="text-[#B0B0DD]">Tax-haven exchanges</strong> (Binance, OKX, Bybit, KuCoin, etc.)
+                      — registered in jurisdictions with minimal local users. Volume redistributed across
+                      countries using Chainalysis regional crypto adoption patterns.
+                    </span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Limitations */}
+              <div>
+                <p className="text-[10px] font-mono tracking-[0.15em] text-[#E0E0FF] uppercase mb-2">Limitations</p>
+                <ul className="space-y-1.5 ml-3">
+                  <li className="flex gap-2">
+                    <span className="text-[#7070AA] shrink-0">&ndash;</span>
+                    <span>Volume shows where trades are <em>executed</em>, not where demand originates. A US-based exchange
+                    may process trades for users worldwide.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#7070AA] shrink-0">&ndash;</span>
+                    <span>Redistribution percentages are estimates based on publicly available data, not actual user
+                    records. Actual geographic distribution may differ.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#7070AA] shrink-0">&ndash;</span>
+                    <span>P2P trading (Binance P2P, Paxful) and DEX volume (Uniswap, Curve) are not included in
+                    country-level figures.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#7070AA] shrink-0">&ndash;</span>
+                    <span>Only USDT, USDC, and DAI are tracked. Other stablecoins (FDUSD, TUSD, PYUSD) are not
+                    yet included.</span>
+                  </li>
+                  <li className="flex gap-2">
+                    <span className="text-[#7070AA] shrink-0">&ndash;</span>
+                    <span>Regulation statuses are based on publicly available information and may not reflect
+                    the latest legislative changes. Always verify through official government sources.</span>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Legal */}
+              <div className="pt-2 border-t border-[rgba(255,255,255,0.06)]">
+                <p className="text-[#7070AA]/70">
+                  This tool is for informational and educational purposes only. It does not constitute financial,
+                  legal, or investment advice.
+                </p>
+              </div>
             </div>
           </Collapsible>
         </section>

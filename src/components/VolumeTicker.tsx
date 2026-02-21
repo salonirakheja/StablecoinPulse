@@ -184,43 +184,59 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
 
               <div className="space-y-4 text-xs leading-relaxed text-[#7070AA]">
                 <p>
-                  We combine <span className="text-[#E0E0FF]">three live data sources</span> to build the most comprehensive free picture of global stablecoin activity.
+                  24h spot trading volume for <span className="text-[#E0E0FF]">USDT, USDC, and DAI</span> across
+                  80+ countries, refreshed every 15 minutes.
                 </p>
 
                 <div>
                   <h3 className="text-[10px] tracking-widest text-[#00F5FF] uppercase mb-1">
-                    Exchange Volume
+                    Data Sources
                   </h3>
                   <p>
-                    Real 24h trading volume from <span className="text-[#E0E0FF]">~500 exchanges</span> via CoinGecko, grouped by country of registration. Refreshed every 15 minutes.
+                    <span className="text-[#E0E0FF]">CoinGecko</span> for real-time exchange volumes from ~500 exchanges.
+                    {' '}<span className="text-[#E0E0FF]">DefiLlama</span> for on-chain stablecoin supply and market caps
+                    across 6 chains (Ethereum, Tron, BSC, Solana, Avalanche, Polygon).
                   </p>
                 </div>
 
                 <div>
                   <h3 className="text-[10px] tracking-widest text-[#00F5FF] uppercase mb-1">
-                    On-Chain Supply
+                    Country Attribution
                   </h3>
-                  <p>
-                    Actual USDT, USDC, and DAI supply across <span className="text-[#E0E0FF]">6 major blockchains</span> (Tron, Ethereum, Solana, BSC, Base, Arbitrum) via DefiLlama. This calibrates the stablecoin mix per region in real time.
-                  </p>
+                  <div className="space-y-2">
+                    <div className="flex gap-2">
+                      <span className="text-[#00F5FF] shrink-0">&bull;</span>
+                      <p>
+                        <span className="text-[#E0E0FF]">Regional exchanges</span> (Upbit, WazirX, Paribu, etc.)
+                        — 100% of volume attributed to home country. Users are predominantly local.
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#00F5FF] shrink-0">&bull;</span>
+                      <p>
+                        <span className="text-[#E0E0FF]">Global exchanges</span> (Coinbase, Kraken, Crypto.com, Bitstamp)
+                        — volume redistributed across countries based on web traffic and app usage patterns.
+                      </p>
+                    </div>
+                    <div className="flex gap-2">
+                      <span className="text-[#00F5FF] shrink-0">&bull;</span>
+                      <p>
+                        <span className="text-[#E0E0FF]">Tax-haven exchanges</span> (Binance, OKX, Bybit, KuCoin, etc.)
+                        — redistributed using Chainalysis regional adoption data.
+                      </p>
+                    </div>
+                  </div>
                 </div>
 
-                <div>
-                  <h3 className="text-[10px] tracking-widest text-[#00F5FF] uppercase mb-1">
-                    Regional Modeling
+                <div className="p-3 rounded-lg border border-[rgba(255,184,0,0.15)]"
+                  style={{ background: 'rgba(255,184,0,0.04)' }}>
+                  <h3 className="text-[10px] tracking-widest text-[#FFB800] uppercase mb-1">
+                    Limitations
                   </h3>
                   <p>
-                    Each blockchain has distinct geographic usage patterns — Tron dominates emerging markets, Base skews US/Coinbase, Ethereum is institutional/Western. We use these patterns, informed by <span className="text-[#E0E0FF]">Chainalysis geographic reports</span>, to distribute on-chain data across countries.
-                  </p>
-                </div>
-
-                <div className="p-3 rounded-lg border border-[rgba(0,245,255,0.1)]"
-                  style={{ background: 'rgba(0,245,255,0.03)' }}>
-                  <h3 className="text-[10px] tracking-widest text-[#E0E0FF] uppercase mb-1">
-                    Accuracy
-                  </h3>
-                  <p>
-                    Country rankings and relative volumes are reliable. The USDT vs USDC breakdown per country is modeled using live on-chain ratios — not guessed. Global totals are within range of industry estimates.
+                    Volume shows where trades <em>execute</em>, not where demand originates.
+                    Redistribution percentages are estimates — actual user geography may differ.
+                    P2P and DEX volumes are not included. Only USDT, USDC, and DAI are tracked.
                   </p>
                 </div>
 
@@ -236,10 +252,15 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
                     </div>
                     <div className="flex items-center gap-1.5">
                       <div className="w-1.5 h-1.5 rounded-full bg-[#39FF14]" />
-                      <span className="text-[9px] text-[#39FF14]">Chainalysis Models</span>
+                      <span className="text-[9px] text-[#39FF14]">Chainalysis</span>
                     </div>
                   </div>
-                  <p className="text-[9px] text-[#7070AA]/60 mt-1.5">All data refreshes automatically every 15 min</p>
+                  <a
+                    href="/about"
+                    className="inline-block mt-2 text-[9px] font-mono tracking-wider text-[#00F5FF]/70 hover:text-[#00F5FF] transition-colors"
+                  >
+                    Full methodology on about page &rarr;
+                  </a>
                 </div>
               </div>
             </motion.div>
