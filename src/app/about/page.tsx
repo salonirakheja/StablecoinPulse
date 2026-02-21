@@ -7,7 +7,7 @@ import HoverCard from './HoverCard';
 export const metadata: Metadata = {
   title: 'About — Stablecoin Pulse',
   description:
-    'Stablecoin Pulse is a real-time 3D visualization of global stablecoin trading volume and regulation status. Live data from 500+ exchanges, 6 blockchains, and government sources across 45+ countries.',
+    'Stablecoin Pulse is a real-time 3D visualization of global stablecoin trading volume and regulation status. Live data from 500+ exchanges, 6 blockchains, and government sources across 80+ countries.',
 };
 
 const regulationCategories = [
@@ -155,6 +155,13 @@ export default function AboutPage() {
               adoption patterns. Tax-haven exchanges are redistributed to actual user countries for accuracy.
             </HoverCard>
           </div>
+          <p className="text-xs text-[#7070AA] leading-relaxed max-w-2xl mt-4 italic">
+            Note: Volume reflects where stablecoin trades are executed, not where demand originates.
+            Countries with major exchanges (e.g. the US with Coinbase and Kraken) rank high because
+            institutional trading, arbitrage, and DeFi activity flow through their platforms — even though
+            actual stablecoin adoption as a dollar substitute is strongest in emerging markets with
+            currency instability.
+          </p>
         </section>
 
         <SectionDivider />
@@ -219,6 +226,14 @@ export default function AboutPage() {
               <p>
                 Data refreshes approximately every 15 minutes. Volume figures are estimates based on available
                 exchange and on-chain data and may not capture all activity.
+              </p>
+              <p>
+                Volume represents where stablecoin trades are executed, not necessarily where demand originates.
+                For global exchanges (Binance, Coinbase, Kraken, OKX, Crypto.com, etc.), trading volume is
+                redistributed across countries using estimated user demographics based on Chainalysis adoption
+                data, company reports, and web traffic patterns. For regional exchanges with predominantly
+                local user bases (Upbit, WazirX, Paribu, etc.), volume is attributed to their home country.
+                This is an estimation model — actual user geography may differ from these approximations.
               </p>
               <p>
                 Regulation statuses are based on publicly available information and are subject to change.

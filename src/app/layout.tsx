@@ -21,7 +21,7 @@ export const metadata: Metadata = {
   keywords: ["stablecoin", "USDT", "USDC", "crypto volume", "heatmap", "globe", "trading volume", "DeFi"],
   openGraph: {
     title: "Stablecoin Pulse — Global Volume Heatmap",
-    description: "See where crypto dollars flow around the world. Live data from 500+ exchanges across 45+ countries.",
+    description: "See where crypto dollars flow around the world. Live data from 500+ exchanges across 80+ countries.",
     type: "website",
     siteName: "Stablecoin Pulse",
   },

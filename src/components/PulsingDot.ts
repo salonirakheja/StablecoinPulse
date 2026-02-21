@@ -32,45 +32,21 @@ export function createPulsingDot(map: mapboxgl.Map): PulsingDotImage {
 
       ctx.clearRect(0, 0, size, size);
 
-      // Outer expanding ring 1
+      // Expanding stroke ring 1 — radar ping effect
       const outerRadius1 = maxOuter * t + innerRadius;
       ctx.beginPath();
       ctx.arc(center, center, outerRadius1, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 245, 255, ${0.2 * (1 - t)})`;
-      ctx.fill();
+      ctx.strokeStyle = `rgba(0, 245, 255, ${0.6 * (1 - t)})`;
+      ctx.lineWidth = 2.5 * (1 - t) + 0.5;
+      ctx.stroke();
 
-      // Outer expanding ring 2 (offset phase)
+      // Expanding stroke ring 2 (offset phase)
       const t2 = ((performance.now() + 1000) % duration) / duration;
       const outerRadius2 = maxOuter * t2 + innerRadius;
       ctx.beginPath();
       ctx.arc(center, center, outerRadius2, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(0, 245, 255, ${0.12 * (1 - t2)})`;
-      ctx.fill();
-
-      // Inner glow gradient
-      const gradient = ctx.createRadialGradient(
-        center, center, 0,
-        center, center, innerRadius * 4
-      );
-      gradient.addColorStop(0, 'rgba(0, 245, 255, 0.7)');
-      gradient.addColorStop(0.4, 'rgba(0, 245, 255, 0.2)');
-      gradient.addColorStop(1, 'rgba(0, 245, 255, 0)');
-      ctx.beginPath();
-      ctx.arc(center, center, innerRadius * 4, 0, Math.PI * 2);
-      ctx.fillStyle = gradient;
-      ctx.fill();
-
-      // Core white-hot dot
-      ctx.beginPath();
-      ctx.arc(center, center, innerRadius, 0, Math.PI * 2);
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.95)';
-      ctx.fill();
-
-      // Thin cyan ring around core
-      ctx.beginPath();
-      ctx.arc(center, center, innerRadius + 2, 0, Math.PI * 2);
-      ctx.strokeStyle = 'rgba(0, 245, 255, 0.6)';
-      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = `rgba(0, 245, 255, ${0.45 * (1 - t2)})`;
+      ctx.lineWidth = 2 * (1 - t2) + 0.5;
       ctx.stroke();
 
       this.data = ctx.getImageData(0, 0, size, size).data;

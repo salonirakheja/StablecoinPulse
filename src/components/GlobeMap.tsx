@@ -34,7 +34,6 @@ const VOLUME_LAYERS = [
   'volume-glow-outer',
   'volume-glow-mid',
   'volume-core',
-  'volume-pulse',
 ];
 
 const REGULATION_LAYERS = [
@@ -134,7 +133,6 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
       const mapboxgl = (await import('mapbox-gl')).default;
       // @ts-expect-error - CSS import for side effects
       await import('mapbox-gl/dist/mapbox-gl.css');
-      const { createPulsingDot } = await import('./PulsingDot');
 
       if (!process.env.NEXT_PUBLIC_MAPBOX_TOKEN) {
         console.error('NEXT_PUBLIC_MAPBOX_TOKEN is not set');
@@ -161,25 +159,12 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
         // Electric atmosphere
         map.setFog(FOG_CONFIG as mapboxgl.FogSpecification);
 
-        // Add pulsing dot image
-        map.addImage('pulsing-dot', createPulsingDot(map), { pixelRatio: 2 });
-
         const geojson = getFilteredGeojson(initialData, filter);
 
         // Main data source
         map.addSource('country-volumes', {
           type: 'geojson',
           data: geojson,
-        });
-
-        // Top 10 source for pulsing dots
-        const top10Geojson = {
-          ...geojson,
-          features: geojson.features.slice(0, 10),
-        };
-        map.addSource('country-volumes-top10', {
-          type: 'geojson',
-          data: top10Geojson,
         });
 
         // Connection lines between top 5
@@ -461,22 +446,6 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
           },
         });
 
-        // Layer 5: Pulsing dots for top 10
-        map.addLayer({
-          id: 'volume-pulse',
-          type: 'symbol',
-          source: 'country-volumes-top10',
-          layout: {
-            'icon-image': 'pulsing-dot',
-            'icon-allow-overlap': true,
-            'icon-size': [
-              'interpolate', ['linear'],
-              ['get', 'volume_normalized'],
-              0.3, 0.4,
-              1, 1.0,
-            ],
-          },
-        });
 
         // ===== INTERACTIONS =====
 
@@ -630,6 +599,21 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
           }
         });
 
+        // Apply initial viewMode visibility (useEffect may have fired before map was ready)
+        const isRegulation = viewModeRef.current === 'regulation';
+        if (isRegulation) {
+          for (const layerId of VOLUME_LAYERS) {
+            if (map.getLayer(layerId)) {
+              map.setLayoutProperty(layerId, 'visibility', 'none');
+            }
+          }
+          for (const layerId of REGULATION_LAYERS) {
+            if (map.getLayer(layerId)) {
+              map.setLayoutProperty(layerId, 'visibility', 'visible');
+            }
+          }
+        }
+
         onMapLoaded?.();
       });
 
@@ -678,16 +662,8 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
 
     const geojson = getFilteredGeojson(initialData, filter);
     const source = map.getSource('country-volumes') as mapboxgl.GeoJSONSource;
-    const top10Source = map.getSource('country-volumes-top10') as mapboxgl.GeoJSONSource;
-
     if (source) {
       source.setData(geojson);
-    }
-    if (top10Source) {
-      top10Source.setData({
-        ...geojson,
-        features: geojson.features.slice(0, 10),
-      });
     }
   }, [filter, initialData, getFilteredGeojson]);
 
