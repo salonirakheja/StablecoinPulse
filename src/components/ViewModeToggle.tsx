@@ -23,7 +23,7 @@ export default function ViewModeToggle({ viewMode, onViewModeChange }: ViewModeT
           key={mode}
           onClick={() => onViewModeChange(mode)}
           className={`relative px-3 py-1.5 rounded-md text-[10px] font-mono tracking-wider transition-colors duration-200
-            max-md:px-2 max-md:py-1
+            max-md:px-2
             ${viewMode === mode
               ? 'text-[#00F5FF]'
               : 'text-[#7070AA] hover:text-[#E0E0FF]'

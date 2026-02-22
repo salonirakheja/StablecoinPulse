@@ -46,7 +46,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
                 key={f.value}
                 onClick={() => onFilterChange(f.value)}
                 className={`relative px-3 py-1.5 rounded-lg text-xs font-mono tracking-wider transition-all duration-200
-                  max-md:px-2.5 max-md:py-1.5
+                  max-md:px-2.5
                   ${filter === f.value
                     ? 'text-[#00F5FF]'
                     : 'text-[#7070AA] hover:text-[#E0E0FF]'

@@ -90,7 +90,7 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
                 onClick={() => setShowMethodology(true)}
                 className="text-[9px] text-[#7070AA] hover:text-[#00F5FF] transition-colors
                   tracking-wider font-mono underline underline-offset-2 decoration-[rgba(112,112,170,0.3)]
-                  max-md:hidden"
+                  max-md:px-2 max-md:py-1"
               >
                 HOW?
               </button>
@@ -130,7 +130,7 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
                   onClick={() => setShowRegAbout(true)}
                   className="text-[9px] text-[#7070AA] hover:text-[#00F5FF] transition-colors
                     tracking-wider font-mono underline underline-offset-2 decoration-[rgba(112,112,170,0.3)]
-                    max-md:hidden"
+                    max-md:px-2 max-md:py-1"
                 >
                   ABOUT
                 </button>

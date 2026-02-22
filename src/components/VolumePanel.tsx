@@ -48,7 +48,7 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
       {/* Mobile toggle button */}
       <button
         onClick={onToggle}
-        className="md:hidden fixed bottom-14 right-3 z-30 px-4 py-2.5 rounded-xl
+        className="md:hidden fixed bottom-16 right-3 z-30 px-4 py-3 rounded-xl
           text-xs font-mono tracking-wider text-[#00F5FF]
           backdrop-blur-md border border-[rgba(0,245,255,0.3)]
           transition-all duration-200 active:scale-95"
@@ -114,7 +114,7 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
         )}
 
         {/* Country list */}
-        <div className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh]">
+        <div className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh] max-md:pb-14">
           {topCountries.map((country, i) => (
             <motion.div
               key={country.iso2}
