@@ -54,7 +54,7 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
       {/* Mobile toggle button */}
       <button
         onClick={onToggle}
-        className="md:hidden fixed bottom-16 right-3 z-30 px-4 py-3 rounded-xl
+        className="md:hidden fixed bottom-16 right-3 z-50 px-4 py-3 rounded-xl
           text-xs font-mono tracking-wider text-[#00F5FF]
           backdrop-blur-md border border-[rgba(0,245,255,0.3)]
           transition-all duration-200 active:scale-95"

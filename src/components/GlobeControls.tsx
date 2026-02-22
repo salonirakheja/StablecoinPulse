@@ -23,8 +23,8 @@ const STATUS_ORDER: RegulationStatus[] = ['regulated', 'partial', 'restricted', 
 export default function GlobeControls({ filter, onFilterChange, viewMode }: GlobeControlsProps) {
   return (
     <motion.div
-      className="absolute bottom-6 left-6 z-20 flex flex-col gap-3
-        max-md:bottom-14 max-md:left-3 max-md:right-auto max-md:flex-row max-md:gap-2"
+      className="absolute bottom-6 left-6 z-30 flex flex-col gap-3
+        max-md:bottom-16 max-md:left-3 max-md:right-auto max-md:flex-row max-md:gap-2"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
@@ -88,7 +88,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
         /* Regulation legend */
         <div
           className="flex flex-col gap-2 p-3 rounded-xl backdrop-blur-md
-            max-md:flex-row max-md:p-2 max-md:items-center max-md:gap-3
+            max-md:hidden
             border border-[rgba(0,245,255,0.12)]"
           style={{ background: 'rgba(5, 5, 25, 0.75)' }}
         >
