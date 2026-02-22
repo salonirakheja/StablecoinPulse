@@ -914,7 +914,7 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
       <div ref={mapContainerRef} className="w-full h-full" />
       {/* Hover label */}
       {hoveredCountry && !selectedCountry && (
-        <div className="pointer-events-none fixed top-4 max-md:top-16 left-1/2 -translate-x-1/2 z-50
+        <div className="pointer-events-none fixed top-4 max-md:top-24 left-1/2 -translate-x-1/2 z-50
           px-4 py-2 rounded-lg backdrop-blur-md
           bg-[rgba(5,5,25,0.85)] border border-[rgba(0,245,255,0.3)]
           text-[#00F5FF] text-sm font-mono
