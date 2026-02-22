@@ -98,7 +98,7 @@ function HomeContent() {
         <>
           {/* Top bar */}
           <header className="fixed top-0 left-0 right-0 z-20 flex items-center justify-between px-3 py-3 md:px-6 md:py-4">
-            <div className="flex items-center gap-3 md:gap-4">
+            <div className="flex items-center gap-2 md:gap-4">
               <div>
                 <h1
                   className="text-sm md:text-base font-bold tracking-[0.25em] text-[#E0E0FF]"
@@ -117,14 +117,14 @@ function HomeContent() {
             <div className="flex items-center gap-2 md:gap-3">
               <Link
                 href="/blog"
-                className="px-3 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
+                className="px-3 py-2 max-md:px-2 max-md:py-1.5 rounded-lg text-[10px] md:text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
                 style={{ background: 'rgba(5, 5, 25, 0.6)' }}
               >
                 BLOG
               </Link>
               <Link
                 href="/about"
-                className="px-3 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
+                className="px-3 py-2 max-md:px-2 max-md:py-1.5 rounded-lg text-[10px] md:text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
                 style={{ background: 'rgba(5, 5, 25, 0.6)' }}
               >
                 ABOUT
