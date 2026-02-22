@@ -117,22 +117,24 @@ function HomeContent() {
             <div className="flex items-center gap-2 md:gap-3">
               <Link
                 href="/blog"
-                className="max-md:hidden px-3 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
+                className="px-3 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
                 style={{ background: 'rgba(5, 5, 25, 0.6)' }}
               >
                 BLOG
               </Link>
               <Link
                 href="/about"
-                className="max-md:hidden px-3 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
+                className="px-3 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
                 style={{ background: 'rgba(5, 5, 25, 0.6)' }}
               >
                 ABOUT
               </Link>
-              <ShareButton
-                topCountries={data.topCountries}
-                globalVolume={data.globalVolume}
-              />
+              <div className="max-md:hidden">
+                <ShareButton
+                  topCountries={data.topCountries}
+                  globalVolume={data.globalVolume}
+                />
+              </div>
             </div>
           </header>
 
