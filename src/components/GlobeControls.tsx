@@ -68,10 +68,10 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
             ))}
           </div>
 
-          {/* 24H indicator badge */}
+          {/* 24H indicator badge — hidden on mobile to avoid colliding with RANKINGS button */}
           <div
             className="flex items-center gap-1.5 px-3 py-2 rounded-xl backdrop-blur-md
-              max-md:px-2 max-md:py-1.5
+              max-md:hidden
               border border-[rgba(0,245,255,0.12)]"
             style={{ background: 'rgba(5, 5, 25, 0.75)' }}
           >
