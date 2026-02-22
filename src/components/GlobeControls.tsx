@@ -24,7 +24,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
   return (
     <motion.div
       className="absolute bottom-6 left-6 z-30 flex flex-col gap-3
-        max-md:bottom-16 max-md:left-3 max-md:right-auto max-md:flex-row max-md:gap-2"
+        max-md:bottom-20 max-md:left-3 max-md:right-auto max-md:flex-row max-md:gap-2"
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.5, delay: 0.3 }}
