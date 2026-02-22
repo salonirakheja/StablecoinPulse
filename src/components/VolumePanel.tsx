@@ -45,20 +45,22 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
 
   return (
     <>
-      {/* Mobile toggle button */}
-      <button
-        onClick={onToggle}
-        className="md:hidden fixed bottom-16 right-3 z-50 px-4 py-3 rounded-xl
-          text-xs font-mono tracking-wider text-[#00F5FF]
-          backdrop-blur-md border border-[rgba(0,245,255,0.3)]
-          transition-all duration-200 active:scale-95"
-        style={{
-          background: 'rgba(5, 5, 25, 0.85)',
-          boxShadow: '0 0 15px rgba(0,245,255,0.15)',
-        }}
-      >
-        {isOpen ? 'CLOSE' : 'RANKINGS'}
-      </button>
+      {/* Mobile toggle button — hidden when panel is open */}
+      {!isOpen && (
+        <button
+          onClick={onToggle}
+          className="md:hidden fixed bottom-16 right-3 z-50 px-4 py-3 rounded-xl
+            text-xs font-mono tracking-wider text-[#00F5FF]
+            backdrop-blur-md border border-[rgba(0,245,255,0.3)]
+            transition-all duration-200 active:scale-95"
+          style={{
+            background: 'rgba(5, 5, 25, 0.85)',
+            boxShadow: '0 0 15px rgba(0,245,255,0.15)',
+          }}
+        >
+          RANKINGS
+        </button>
+      )}
 
       {/* Panel */}
       <motion.div
@@ -77,6 +79,14 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
             <h2 className="text-[10px] tracking-[0.2em] text-[#7070AA] uppercase">
               Top Countries by Volume
             </h2>
+            <button
+              onClick={onToggle}
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded-full
+                text-[#7070AA] hover:text-[#00F5FF] hover:bg-[rgba(0,245,255,0.1)]
+                transition-colors text-sm"
+            >
+              ✕
+            </button>
           </div>
           <div className="flex items-baseline gap-2">
             <span

@@ -51,20 +51,22 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
 
   return (
     <>
-      {/* Mobile toggle button */}
-      <button
-        onClick={onToggle}
-        className="md:hidden fixed bottom-16 right-3 z-50 px-4 py-3 rounded-xl
-          text-xs font-mono tracking-wider text-[#00F5FF]
-          backdrop-blur-md border border-[rgba(0,245,255,0.3)]
-          transition-all duration-200 active:scale-95"
-        style={{
-          background: 'rgba(5, 5, 25, 0.85)',
-          boxShadow: '0 0 15px rgba(0,245,255,0.15)',
-        }}
-      >
-        {isOpen ? 'CLOSE' : 'REGULATIONS'}
-      </button>
+      {/* Mobile toggle button — hidden when panel is open */}
+      {!isOpen && (
+        <button
+          onClick={onToggle}
+          className="md:hidden fixed bottom-16 right-3 z-50 px-4 py-3 rounded-xl
+            text-xs font-mono tracking-wider text-[#00F5FF]
+            backdrop-blur-md border border-[rgba(0,245,255,0.3)]
+            transition-all duration-200 active:scale-95"
+          style={{
+            background: 'rgba(5, 5, 25, 0.85)',
+            boxShadow: '0 0 15px rgba(0,245,255,0.15)',
+          }}
+        >
+          REGULATIONS
+        </button>
+      )}
 
       {/* Panel */}
       <motion.div
@@ -79,9 +81,19 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
       >
         {/* Header */}
         <div className="px-4 pt-4 pb-2 border-b border-[rgba(0,245,255,0.08)]">
-          <h2 className="text-[10px] tracking-[0.2em] text-[#7070AA] uppercase mb-1">
-            Stablecoin Regulations
-          </h2>
+          <div className="flex items-center justify-between">
+            <h2 className="text-[10px] tracking-[0.2em] text-[#7070AA] uppercase mb-1">
+              Stablecoin Regulations
+            </h2>
+            <button
+              onClick={onToggle}
+              className="md:hidden w-8 h-8 flex items-center justify-center rounded-full
+                text-[#7070AA] hover:text-[#00F5FF] hover:bg-[rgba(0,245,255,0.1)]
+                transition-colors text-sm -mt-1"
+            >
+              ✕
+            </button>
+          </div>
           <p
             className="text-sm font-mono font-bold text-[#E0E0FF]"
             style={{ textShadow: '0 0 10px rgba(0,245,255,0.3)' }}
