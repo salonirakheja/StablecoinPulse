@@ -148,6 +148,19 @@ function HomeContent() {
                 />
               </div>
             </div>
+
+            {/* Mobile-only: 24H Rolling indicator strip */}
+            {viewMode === 'volume' && (
+              <div className="md:hidden flex items-center justify-center gap-1.5 w-full py-1">
+                <div
+                  className="w-1.5 h-1.5 rounded-full bg-[#00F5FF] flex-shrink-0"
+                  style={{ boxShadow: '0 0 6px #00F5FF' }}
+                />
+                <span className="text-[10px] tracking-widest text-[#7070AA] uppercase font-mono">
+                  24H Rolling Volume
+                </span>
+              </div>
+            )}
           </header>
 
           {/* Controls — hide stablecoin filter in regulation mode */}
