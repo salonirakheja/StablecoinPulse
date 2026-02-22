@@ -6,9 +6,10 @@ import { ViewMode } from '@/lib/types';
 interface ViewModeToggleProps {
   viewMode: ViewMode;
   onViewModeChange: (mode: ViewMode) => void;
+  inactive?: boolean;
 }
 
-export default function ViewModeToggle({ viewMode, onViewModeChange }: ViewModeToggleProps) {
+export default function ViewModeToggle({ viewMode, onViewModeChange, inactive }: ViewModeToggleProps) {
   return (
     <motion.div
       className="flex items-center gap-1 p-1 rounded-lg backdrop-blur-md
@@ -24,12 +25,12 @@ export default function ViewModeToggle({ viewMode, onViewModeChange }: ViewModeT
           onClick={() => onViewModeChange(mode)}
           className={`relative px-3 py-1.5 rounded-md text-[10px] font-mono tracking-wider transition-colors duration-200
             max-md:px-2
-            ${viewMode === mode
+            ${!inactive && viewMode === mode
               ? 'text-[#00F5FF]'
               : 'text-[#7070AA] hover:text-[#E0E0FF]'
             }`}
         >
-          {viewMode === mode && (
+          {!inactive && viewMode === mode && (
             <motion.div
               layoutId="viewmode-active"
               className="absolute inset-0 rounded-md border border-[rgba(0,245,255,0.4)]"

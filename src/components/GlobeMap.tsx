@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { MAP_CONFIG, FOG_CONFIG } from '@/lib/constants';
 import { VolumeApiResponse, StablecoinFilter, ViewMode } from '@/lib/types';
+import { useIsMobile } from '@/lib/useIsMobile';
 import { getCountryWeights } from '@/data/stablecoin-weights';
 import {
   STABLECOIN_REGULATIONS,
@@ -83,6 +84,7 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
   const viewModeRef = useRef(viewMode);
   viewModeRef.current = viewMode;
   const [selectedCountry, setSelectedCountry] = useState<SelectedCountryData | null>(null);
+  const isMobile = useIsMobile();
 
   // Recompute geojson when filter changes (per-country weighting)
   const getFilteredGeojson = useCallback((data: VolumeApiResponse, selectedFilter: StablecoinFilter): GeoJSON.FeatureCollection => {
@@ -151,6 +153,16 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
         attributionControl: false,
         preserveDrawingBuffer: true,
         antialias: true,
+        transformRequest: (url: string) => {
+          // CDN endpoints (a/b/c/d.tiles.mapbox.com) don't handle
+          // URL-restricted tokens properly — route through api.mapbox.com
+          if (/^https:\/\/[a-d]\.tiles\.mapbox\.com/.test(url)) {
+            return {
+              url: url.replace(/^https:\/\/[a-d]\.tiles\.mapbox\.com/, 'https://api.mapbox.com'),
+            };
+          }
+          return { url };
+        },
       });
 
       mapRef.current = map;
@@ -199,7 +211,10 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
         // Layer 0: Invisible interactive country fill (for clicking any country)
         map.addSource('country-fills', {
           type: 'vector',
-          url: 'mapbox://mapbox.country-boundaries-v1',
+          tiles: [
+            `https://api.mapbox.com/v4/mapbox.country-boundaries-v1/{z}/{x}/{y}.mvt?access_token=${mapboxgl.accessToken}`,
+          ],
+          maxzoom: 6,
         });
         map.addLayer({
           id: 'country-fills',
@@ -927,21 +942,21 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
       {selectedCountry && (
         <div
           className={`z-50 pointer-events-auto ${
-            typeof window !== 'undefined' && window.innerWidth < 768
+            isMobile
               ? 'fixed bottom-16 left-4 right-4 flex justify-center'
               : 'absolute'
           }`}
           style={
-            typeof window !== 'undefined' && window.innerWidth < 768
+            isMobile
               ? undefined
               : {
                   left: Math.min(
                     Math.max(selectedCountry.x - 120, 8),
-                    (typeof window !== 'undefined' ? window.innerWidth : 800) - 272
+                    window.innerWidth - 272
                   ),
                   top: Math.min(
                     Math.max(selectedCountry.y - 200, 10),
-                    (typeof window !== 'undefined' ? window.innerHeight : 600) - 350
+                    window.innerHeight - 350
                   ),
                 }
           }

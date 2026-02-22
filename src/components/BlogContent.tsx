@@ -1,18 +1,6 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import PageNavHeader from '@/components/PageNavHeader';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'Blog — Stablecoin Pulse',
-  description:
-    'Insights on global stablecoin regulation, adoption, and trading volume. Data-driven analysis from Stablecoin Pulse.',
-  openGraph: {
-    title: 'Blog — Stablecoin Pulse',
-    description:
-      'Insights on global stablecoin regulation, adoption, and trading volume.',
-    type: 'website',
-  },
-};
+import Link from 'next/link';
 
 const posts = [
   {
@@ -25,11 +13,9 @@ const posts = [
   },
 ];
 
-export default function BlogPage() {
+export default function BlogContent() {
   return (
     <div className="min-h-screen bg-[#030308]">
-      <PageNavHeader activePage="blog" />
-
       {/* Hero */}
       <section className="relative px-6 pt-20 pb-16 md:px-16 lg:px-24 overflow-hidden">
         <div

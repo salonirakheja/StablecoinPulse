@@ -1,15 +1,8 @@
-import type { Metadata } from 'next';
-import Link from 'next/link';
-import Collapsible from './Collapsible';
-import CountUpStats from './CountUpStats';
-import HoverCard from './HoverCard';
-import PageNavHeader from '@/components/PageNavHeader';
+'use client';
 
-export const metadata: Metadata = {
-  title: 'About — Stablecoin Pulse',
-  description:
-    'Stablecoin Pulse is a real-time 3D visualization of global stablecoin trading volume and regulation status. Live data from 500+ exchanges, 6 blockchains, and government sources across 80+ countries.',
-};
+import Collapsible from '@/app/about/Collapsible';
+import CountUpStats from '@/app/about/CountUpStats';
+import HoverCard from '@/app/about/HoverCard';
 
 const regulationCategories = [
   { label: 'Regulated', color: '#39FF14', description: 'Clear legal framework for stablecoin usage and exchange operations.' },
@@ -18,11 +11,34 @@ const regulationCategories = [
   { label: 'Unclear', color: '#7070AA', description: 'No official stance or legislation is pending. Regulatory status is ambiguous.' },
 ];
 
-export default function AboutPage() {
+function SectionDivider() {
+  return <hr className="border-0 h-px bg-[rgba(255,255,255,0.08)]" />;
+}
+
+function SectionLabel({ children }: { children: React.ReactNode }) {
+  return (
+    <h2 className="text-[13px] font-mono tracking-[0.25em] text-[#00F5FF] uppercase mb-5">
+      {children}
+    </h2>
+  );
+}
+
+function SourceItem({ name, children }: { name: string; children: React.ReactNode }) {
+  return (
+    <li className="flex items-center gap-2 text-sm text-[#B0B0DD]">
+      <span className="text-[#00F5FF]">&bull;</span>
+      <span><strong className="text-[#E0E0FF] font-mono text-xs">{name}</strong> / {children}</span>
+    </li>
+  );
+}
+
+interface AboutContentProps {
+  onNavigateGlobe?: () => void;
+}
+
+export default function AboutContent({ onNavigateGlobe }: AboutContentProps) {
   return (
     <div className="min-h-screen bg-[#030308]">
-      <PageNavHeader activePage="about" />
-
       {/* Hero */}
       <section className="relative px-6 pt-20 pb-16 md:px-16 lg:px-24 overflow-hidden">
         {/* Gradient accent */}
@@ -290,9 +306,9 @@ export default function AboutPage() {
 
         {/* CTA */}
         <section className="flex justify-center pt-4">
-          <Link
-            href="/"
-            className="group relative inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-mono tracking-wider text-[#030308] font-bold transition-all duration-200"
+          <button
+            onClick={onNavigateGlobe}
+            className="group relative inline-flex items-center gap-2 px-8 py-3.5 rounded-xl text-sm font-mono tracking-wider text-[#030308] font-bold transition-all duration-200 cursor-pointer"
             style={{
               background: 'linear-gradient(135deg, #00F5FF 0%, #4D4DFF 100%)',
               boxShadow: '0 0 30px rgba(0,245,255,0.3), 0 0 60px rgba(0,245,255,0.1)',
@@ -302,7 +318,7 @@ export default function AboutPage() {
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="transition-transform group-hover:translate-x-1">
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
-          </Link>
+          </button>
         </section>
 
         {/* Footer */}
@@ -311,26 +327,5 @@ export default function AboutPage() {
         </footer>
       </main>
     </div>
-  );
-}
-
-function SectionDivider() {
-  return <hr className="border-0 h-px bg-[rgba(255,255,255,0.08)]" />;
-}
-
-function SectionLabel({ children }: { children: React.ReactNode }) {
-  return (
-    <h2 className="text-[13px] font-mono tracking-[0.25em] text-[#00F5FF] uppercase mb-5">
-      {children}
-    </h2>
-  );
-}
-
-function SourceItem({ name, children }: { name: string; children: React.ReactNode }) {
-  return (
-    <li className="flex items-center gap-2 text-sm text-[#B0B0DD]">
-      <span className="text-[#00F5FF]">&bull;</span>
-      <span><strong className="text-[#E0E0FF] font-mono text-xs">{name}</strong> / {children}</span>
-    </li>
   );
 }

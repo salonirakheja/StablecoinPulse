@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import PageNavHeader from '@/components/PageNavHeader';
 import {
   STABLECOIN_REGULATIONS,
   REGULATION_COLORS,
@@ -69,27 +70,7 @@ function getCountriesByStatus(status: RegulationStatus): CountryRegulation[] {
 export default function RegulationsPostPage() {
   return (
     <div className="min-h-screen bg-[#030308]">
-      {/* Header */}
-      <header className="border-b border-[rgba(0,245,255,0.1)] px-6 py-6 md:px-16 lg:px-24">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1
-              className="text-sm font-bold tracking-[0.25em] text-[#E0E0FF]"
-              style={{ textShadow: '0 0 20px rgba(0,245,255,0.4), 0 0 40px rgba(0,245,255,0.15)' }}
-            >
-              STABLECOIN PULSE
-            </h1>
-            <p className="text-[10px] font-mono tracking-[0.15em] text-[#7070AA] mt-0.5">BLOG</p>
-          </div>
-          <Link
-            href="/blog"
-            className="px-4 py-2 rounded-xl text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.3)] text-[#00F5FF] transition-all duration-200 hover:shadow-[0_0_20px_rgba(0,245,255,0.3)]"
-            style={{ background: 'rgba(5, 5, 25, 0.75)' }}
-          >
-            &larr; ALL POSTS
-          </Link>
-        </div>
-      </header>
+      <PageNavHeader activePage="blog" />
 
       {/* Article */}
       <article className="px-6 md:px-16 lg:px-24 pb-20">

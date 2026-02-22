@@ -88,7 +88,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
         /* Regulation legend */
         <div
           className="flex flex-col gap-2 p-3 rounded-xl backdrop-blur-md
-            max-md:hidden
+            max-md:flex-row max-md:flex-wrap max-md:gap-x-3 max-md:gap-y-1 max-md:p-2 max-md:items-center
             border border-[rgba(0,245,255,0.12)]"
           style={{ background: 'rgba(5, 5, 25, 0.75)' }}
         >
@@ -96,7 +96,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
             Status
           </span>
           {STATUS_ORDER.map((status) => (
-            <div key={status} className="flex items-center gap-2 px-1">
+            <div key={status} className="flex items-center gap-2 px-1 max-md:gap-1 max-md:px-0">
               <div
                 className="w-2 h-2 rounded-full flex-shrink-0"
                 style={{
@@ -104,7 +104,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
                   boxShadow: `0 0 6px ${REGULATION_COLORS[status]}60`,
                 }}
               />
-              <span className="text-[10px] font-mono text-[#E0E0FF] tracking-wider uppercase">
+              <span className="text-[10px] font-mono text-[#E0E0FF] tracking-wider uppercase max-md:text-[8px]">
                 {REGULATION_LABELS[status]}
               </span>
             </div>

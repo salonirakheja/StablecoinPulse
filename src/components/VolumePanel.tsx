@@ -1,5 +1,6 @@
 'use client';
 
+import { useRef } from 'react';
 import { motion } from 'framer-motion';
 import { CountryVolume, StablecoinStats } from '@/lib/types';
 
@@ -42,6 +43,16 @@ function getFlag(iso2: string): string {
 
 export default function VolumePanel({ topCountries, globalVolume, lastUpdated, isOpen, onToggle, stablecoinStats }: VolumePanelProps) {
   const timeSince = getTimeSince(lastUpdated);
+  const touchStartY = useRef(0);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartY.current = e.touches[0].clientY;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    const deltaY = e.changedTouches[0].clientY - touchStartY.current;
+    if (deltaY > 60) onToggle();
+  };
 
   return (
     <>
@@ -68,13 +79,26 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
           md:top-20 md:right-6 md:w-72
           max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:rounded-b-none max-md:max-h-[50vh]
           ${!isOpen ? 'max-md:translate-y-full' : 'max-md:translate-y-0'}`}
-        style={{ background: 'rgba(5, 5, 25, 0.85)' }}
+        style={{ background: 'rgba(5, 5, 25, 0.85)', transition: 'translate 0.3s ease-out' }}
         initial={{ opacity: 0, x: 20 }}
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.5, delay: 0.4 }}
       >
+        {/* Mobile drag handle */}
+        <div
+          className="md:hidden flex justify-center pt-2"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="w-8 h-1 rounded-full bg-[rgba(0,245,255,0.25)]" />
+        </div>
+
         {/* Header */}
-        <div className="px-4 pt-4 pb-2 border-b border-[rgba(0,245,255,0.08)]">
+        <div
+          className="px-4 pt-4 max-md:pt-2 pb-2 border-b border-[rgba(0,245,255,0.08)]"
+          onTouchStart={handleTouchStart}
+          onTouchEnd={handleTouchEnd}
+        >
           <div className="flex items-center justify-between mb-1">
             <h2 className="text-[10px] tracking-[0.2em] text-[#7070AA] uppercase">
               Top Countries by Volume
