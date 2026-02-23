@@ -150,7 +150,10 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
         </div>
 
         {/* Country list grouped by status */}
-        <div className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh] max-md:pb-14">
+        <div
+          className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh] max-md:pb-14"
+          style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+        >
           {grouped.map((group) => (
             <div key={group.status} className="mb-2">
               {/* Group header */}

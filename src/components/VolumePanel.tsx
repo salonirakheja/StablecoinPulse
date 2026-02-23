@@ -148,7 +148,10 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
         )}
 
         {/* Country list */}
-        <div className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh] max-md:pb-14">
+        <div
+          className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh] max-md:pb-14"
+          style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', touchAction: 'pan-y' }}
+        >
           {topCountries.map((country, i) => (
             <motion.div
               key={country.iso2}
