@@ -77,7 +77,7 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
       <motion.div
         className={`fixed z-40 backdrop-blur-md border border-[rgba(0,245,255,0.12)] rounded-xl overflow-hidden
           md:top-20 md:right-6 md:w-72
-          max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:rounded-b-none max-md:max-h-[50vh]
+          max-md:bottom-0 max-md:left-0 max-md:right-0 max-md:rounded-b-none max-md:max-h-[50vh] max-md:flex max-md:flex-col
           ${!isOpen ? 'max-md:translate-y-full' : 'max-md:translate-y-0'}`}
         style={{ background: 'rgba(5, 5, 25, 0.85)', transition: 'translate 0.3s ease-out' }}
         initial={{ opacity: 0, x: 20 }}
@@ -149,7 +149,7 @@ export default function VolumePanel({ topCountries, globalVolume, lastUpdated, i
 
         {/* Country list */}
         <div
-          className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-[45vh] max-md:pb-14"
+          className="p-2 max-h-[400px] overflow-y-auto max-md:max-h-none max-md:min-h-0 max-md:flex-1 max-md:pb-14"
           style={{ WebkitOverflowScrolling: 'touch', overscrollBehavior: 'contain', touchAction: 'pan-y' }}
         >
           {topCountries.map((country, i) => (
