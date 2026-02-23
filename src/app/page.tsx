@@ -14,6 +14,7 @@ import ShareButton from '@/components/ShareButton';
 import ViewModeToggle from '@/components/ViewModeToggle';
 import BlogContent from '@/components/BlogContent';
 import AboutContent from '@/components/AboutContent';
+import PanelSkeleton from '@/components/PanelSkeleton';
 
 // Dynamic import for GlobeMap to avoid SSR issues with mapbox-gl
 const GlobeMap = dynamic(() => import('@/components/GlobeMap'), {
@@ -168,6 +169,9 @@ function HomeContent() {
           />
         )}
       </div>
+
+      {/* Panel skeleton — show while globe is loading */}
+      {activeView === 'globe' && isLoading && <PanelSkeleton />}
 
       {/* Globe UI overlays — only show when globe is active and loaded */}
       {activeView === 'globe' && !isLoading && data && (
