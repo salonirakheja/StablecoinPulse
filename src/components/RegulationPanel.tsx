@@ -206,15 +206,15 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
 
                   {/* Country info */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-1.5">
-                      <span className="text-xs text-[#E0E0FF] truncate">{reg.country}</span>
+                    <div className={`flex items-center gap-1.5 ${query ? 'flex-wrap' : ''}`}>
+                      <span className="text-xs text-[#E0E0FF] flex-shrink-0">{reg.country}</span>
                       {reg.keyLaw && (
-                        <span className="text-[8px] font-mono text-[#7070AA] truncate flex-shrink-0">
+                        <span className={`text-[8px] font-mono text-[#7070AA] ${query ? '' : 'truncate'}`}>
                           {reg.keyLaw}
                         </span>
                       )}
                     </div>
-                    <p className="text-[9px] text-[#7070AA] leading-relaxed line-clamp-2 mt-0.5">
+                    <p className={`text-[9px] text-[#7070AA] leading-relaxed mt-0.5 ${query ? '' : 'line-clamp-2'}`}>
                       {reg.summary}
                     </p>
                   </div>
