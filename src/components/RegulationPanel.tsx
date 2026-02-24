@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import {
   STABLECOIN_REGULATIONS,
@@ -44,6 +44,7 @@ const STATUS_ORDER: RegulationStatus[] = ['regulated', 'partial', 'restricted', 
 export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelProps) {
   const stats = getRegulationStats();
   const touchStartY = useRef(0);
+  const [search, setSearch] = useState('');
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY;
@@ -53,12 +54,16 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
     const deltaY = e.changedTouches[0].clientY - touchStartY.current;
     if (deltaY > 60) onToggle();
   };
+
+  const query = search.toLowerCase().trim();
   const grouped = STATUS_ORDER.map(status => ({
     status,
     label: REGULATION_LABELS[status],
     color: REGULATION_COLORS[status],
-    countries: STABLECOIN_REGULATIONS.filter(r => r.status === status),
-  }));
+    countries: STABLECOIN_REGULATIONS.filter(r =>
+      r.status === status && (!query || r.country.toLowerCase().includes(query))
+    ),
+  })).filter(g => g.countries.length > 0);
 
   return (
     <>
@@ -147,6 +152,19 @@ export default function RegulationPanel({ isOpen, onToggle }: RegulationPanelPro
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Search */}
+        <div className="px-4 py-2 border-b border-[rgba(0,245,255,0.08)]">
+          <input
+            type="text"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search country..."
+            className="w-full bg-[rgba(0,245,255,0.04)] border border-[rgba(0,245,255,0.12)] rounded-lg
+              px-3 py-1.5 text-xs font-mono text-[#E0E0FF] placeholder-[#7070AA]/50
+              outline-none focus:border-[rgba(0,245,255,0.3)] transition-colors"
+          />
         </div>
 
         {/* Country list grouped by status */}
