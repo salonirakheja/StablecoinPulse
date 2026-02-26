@@ -181,10 +181,11 @@ function HomeContent() {
       <LoadingScreen isLoading={!data} />
       <BackgroundGrid />
 
-      {/* Globe container — stays mounted, hidden when blog/about active */}
+      {/* Globe container — stays mounted, hidden when blog/about active.
+          On mobile in premium mode, hide globe (card covers screen, no starfield benefit). */}
       <div
         id="globe-container"
-        className="absolute inset-0 z-10"
+        className={`absolute inset-0 z-10 ${activeView === 'globe' && viewMode === 'premium' ? 'max-md:hidden' : ''}`}
         style={{ display: activeView === 'globe' ? undefined : 'none' }}
       >
         {data && (
@@ -234,7 +235,7 @@ function HomeContent() {
 
       {/* Premium view — card floats above the globe starfield */}
       {activeView === 'globe' && viewMode === 'premium' && (
-        <div className="absolute inset-0 z-[15] flex items-start md:items-center justify-center pt-[88px] md:pt-20 pb-4 md:pb-16 pointer-events-none">
+        <div className="absolute inset-0 z-[15] flex items-start md:items-center justify-center pt-[72px] md:pt-20 pb-4 md:pb-16 pointer-events-none">
           <div className="pointer-events-auto max-h-full flex overflow-hidden">
             <PremiumPanel
               isOpen={true}
@@ -302,15 +303,15 @@ function HomeContent() {
             )}
           </div>
 
-          {/* Mobile-only: context indicator strip */}
-          {activeView === 'globe' && (viewMode === 'volume' || viewMode === 'premium') && (
+          {/* Mobile-only: context indicator strip — volume only (premium has its own card header) */}
+          {activeView === 'globe' && viewMode === 'volume' && (
             <div className="md:hidden flex items-center justify-center gap-1.5 w-full py-1">
               <div
                 className="w-1.5 h-1.5 rounded-full bg-[#00F5FF] flex-shrink-0"
                 style={{ boxShadow: '0 0 6px #00F5FF' }}
               />
               <span className="text-[10px] tracking-widest text-[#7070AA] uppercase font-mono">
-                {viewMode === 'volume' ? '24H Rolling Volume' : 'Binance P2P vs Official FX'}
+                24H Rolling Volume
               </span>
             </div>
           )}
