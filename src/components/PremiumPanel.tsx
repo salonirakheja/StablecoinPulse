@@ -141,13 +141,13 @@ function HighDemandCard({ count, names }: { count: number; names: string[] }) {
   const [show, setShow] = useState(false);
   return (
     <div
-      className="relative rounded-lg px-3 py-2 border border-[rgba(0,245,255,0.1)]"
+      className="relative rounded-lg px-3 py-1.5 md:py-2 border border-[rgba(0,245,255,0.1)]"
       style={{ background: 'rgba(0,245,255,0.04)' }}
       onMouseEnter={() => setShow(true)}
       onMouseLeave={() => setShow(false)}
     >
-      <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">High Demand</div>
-      <div className="text-sm font-mono font-bold cursor-default" style={{ color: count > 0 ? '#FF1493' : '#7070AA' }}>
+      <div className="text-[8px] md:text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">High Demand</div>
+      <div className="text-xs md:text-sm font-mono font-bold cursor-default whitespace-nowrap" style={{ color: count > 0 ? '#FF1493' : '#7070AA' }}>
         {count} {count === 1 ? 'country' : 'countries'}
       </div>
       <AnimatePresence>
@@ -220,6 +220,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
   const [activeTiers, setActiveTiers] = useState<Set<PremiumTier>>(new Set());
   const [sortKey, setSortKey] = useState<SortKey>('usdt');
   const [sortDir, setSortDir] = useState<SortDir>('desc');
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const toggleRegion = (region: Region) => {
     setActiveRegions(prev => {
@@ -319,35 +320,35 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
 
   return (
     <motion.div
-      className="w-full max-w-2xl mx-4 backdrop-blur-md border border-[rgba(0,245,255,0.12)] rounded-xl
+      className="w-full max-w-2xl mx-2 md:mx-4 backdrop-blur-md border border-[rgba(0,245,255,0.12)] rounded-xl
         overflow-hidden flex flex-col max-h-full"
-      style={{ background: 'rgba(5, 5, 25, 0.85)', boxShadow: '0 0 40px rgba(0,245,255,0.08)' }}
+      style={{ background: 'rgba(5, 5, 25, 0.92)', boxShadow: '0 0 40px rgba(0,245,255,0.08)' }}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5, delay: 0.2 }}
     >
       {/* Loading skeleton */}
       {loading && (
-        <div className="px-6 py-8 flex-1">
-          <div className="flex items-center gap-3 mb-6">
+        <div className="px-4 py-6 md:px-6 md:py-8 flex-1">
+          <div className="flex items-center gap-3 mb-4 md:mb-6">
             <div className="h-2 w-2 rounded-full bg-[#00F5FF] animate-pulse" style={{ boxShadow: '0 0 8px #00F5FF' }} />
-            <div className="text-xs font-mono text-[#7070AA] tracking-wider animate-pulse">
-              SCANNING 16 COUNTRIES ACROSS BINANCE & BYBIT P2P...
+            <div className="text-[10px] md:text-xs font-mono text-[#7070AA] tracking-wider animate-pulse">
+              SCANNING 16 COUNTRIES...
             </div>
           </div>
-          <p className="text-xs leading-relaxed text-[#7070AA] mb-6">
+          <p className="hidden md:block text-xs leading-relaxed text-[#7070AA] mb-6">
             How much more people pay for <span className="text-[#E0E0FF]">1 USDT or USDC</span> vs the official dollar rate in their country.
           </p>
           {/* Skeleton rows */}
           {Array.from({ length: 8 }).map((_, i) => (
-            <div key={i} className="flex items-center gap-4 px-4 py-3" style={{ opacity: 1 - i * 0.1 }}>
-              <div className="w-7 h-7 rounded-full bg-[rgba(112,112,170,0.1)] animate-pulse" />
+            <div key={i} className="flex items-center gap-2 md:gap-4 px-2 md:px-4 py-2.5 md:py-3" style={{ opacity: 1 - i * 0.1 }}>
+              <div className="w-6 h-6 md:w-7 md:h-7 rounded-full bg-[rgba(112,112,170,0.1)] animate-pulse" />
               <div className="flex-1 space-y-1.5">
-                <div className="h-3 w-24 rounded bg-[rgba(112,112,170,0.1)] animate-pulse" />
-                <div className="h-2 w-16 rounded bg-[rgba(112,112,170,0.06)] animate-pulse" />
+                <div className="h-3 w-20 md:w-24 rounded bg-[rgba(112,112,170,0.1)] animate-pulse" />
+                <div className="h-2 w-14 md:w-16 rounded bg-[rgba(112,112,170,0.06)] animate-pulse" />
               </div>
-              <div className="w-20 h-7 rounded bg-[rgba(112,112,170,0.08)] animate-pulse" />
-              <div className="w-20 h-7 rounded bg-[rgba(112,112,170,0.08)] animate-pulse" />
+              <div className="w-16 md:w-20 h-6 md:h-7 rounded bg-[rgba(112,112,170,0.08)] animate-pulse" />
+              <div className="w-16 md:w-20 h-6 md:h-7 rounded bg-[rgba(112,112,170,0.08)] animate-pulse" />
             </div>
           ))}
         </div>
@@ -357,46 +358,65 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
       {!loading && (
         <>
           {/* Header */}
-          <div className="px-6 pt-6 pb-4 border-b border-[rgba(0,245,255,0.08)]">
-            <h2 className="text-xs tracking-[0.2em] text-[#7070AA] uppercase mb-1">
-              Dollar Premium Index
-            </h2>
-            <p
-              className="text-lg font-mono font-bold text-[#E0E0FF] mb-1"
-              style={{ textShadow: '0 0 10px rgba(0,245,255,0.3)' }}
-            >
-              {data && data.countriesWithData < data.countriesTracked
-                ? `${data.countriesWithData} of ${data.countriesTracked} countries with data`
-                : `${data?.countriesTracked ?? 16} countries tracked`}
-            </p>
-            {data?.lastUpdated && (
-              <p className="text-[10px] font-mono text-[#7070AA] mb-2">
-                Last updated: {new Date(data.lastUpdated).toLocaleString('en-US', {
-                  month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true,
-                })}
-              </p>
-            )}
-            <p className="text-xs leading-relaxed text-[#7070AA]">
+          <div className="px-4 pt-4 pb-3 md:px-6 md:pt-6 md:pb-4 border-b border-[rgba(0,245,255,0.08)]">
+            <div className="flex items-baseline justify-between gap-2">
+              <div>
+                <h2 className="text-[10px] md:text-xs tracking-[0.2em] text-[#7070AA] uppercase mb-0.5 md:mb-1">
+                  Dollar Premium Index
+                </h2>
+                <p
+                  className="text-base md:text-lg font-mono font-bold text-[#E0E0FF]"
+                  style={{ textShadow: '0 0 10px rgba(0,245,255,0.3)' }}
+                >
+                  {data && data.countriesWithData < data.countriesTracked
+                    ? `${data.countriesWithData} of ${data.countriesTracked} countries with data`
+                    : `${data?.countriesTracked ?? 16} countries tracked`}
+                </p>
+              </div>
+              {data?.lastUpdated && (
+                <p className="text-[9px] md:text-[10px] font-mono text-[#7070AA] flex-shrink-0">
+                  {new Date(data.lastUpdated).toLocaleString('en-US', {
+                    month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit', hour12: true,
+                  })}
+                </p>
+              )}
+            </div>
+            <p className="hidden md:block text-xs leading-relaxed text-[#7070AA] mt-2">
               How much more people pay for <span className="text-[#E0E0FF]">1 USDT or USDC</span> vs the official dollar rate in their country.
               A <span className="text-[#FFB800]">+5%</span> premium means $1 of stablecoin costs $1.05 in local currency — a signal of real demand.
             </p>
           </div>
 
-          {/* Search */}
-          <div className="px-6 py-2.5">
+          {/* Search + filter toggle (mobile) */}
+          <div className="flex items-center gap-2 px-4 py-2 md:px-6 md:py-2.5">
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search country..."
-              className="w-full bg-[rgba(0,245,255,0.04)] border border-[rgba(0,245,255,0.12)] rounded-lg
+              className="flex-1 bg-[rgba(0,245,255,0.04)] border border-[rgba(0,245,255,0.12)] rounded-lg
                 px-3 py-1.5 text-xs font-mono text-[#E0E0FF] placeholder-[#7070AA]/50
                 outline-none focus:border-[rgba(0,245,255,0.3)] transition-colors"
             />
+            <button
+              onClick={() => setFiltersOpen(!filtersOpen)}
+              className="md:hidden flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] font-mono tracking-wider
+                border transition-colors flex-shrink-0"
+              style={{
+                color: hasFilters ? '#00F5FF' : '#7070AA',
+                borderColor: hasFilters ? 'rgba(0,245,255,0.3)' : 'rgba(112,112,170,0.2)',
+                background: hasFilters ? 'rgba(0,245,255,0.08)' : 'transparent',
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <line x1="4" y1="6" x2="20" y2="6" /><line x1="8" y1="12" x2="16" y2="12" /><line x1="11" y1="18" x2="13" y2="18" />
+              </svg>
+              {hasFilters && <span className="w-1.5 h-1.5 rounded-full bg-[#00F5FF]" />}
+            </button>
           </div>
 
-          {/* Filter chips — two labeled rows */}
-          <div className="px-6 py-3 space-y-2"
+          {/* Filter chips — always visible on desktop, collapsible on mobile */}
+          <div className={`px-4 py-2.5 md:px-6 md:py-3 space-y-2 ${filtersOpen ? '' : 'max-md:hidden'}`}
             style={{ borderTop: '1px solid rgba(255,255,255,0.1)', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
             {/* Row 1: Region */}
             <div className="flex items-center gap-2">
@@ -404,7 +424,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
               <div className="flex flex-wrap gap-1.5">
                 <button
                   onClick={clearAllFilters}
-                  className="px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all duration-200"
+                  className="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-[9px] md:text-[10px] font-mono tracking-wider uppercase transition-all duration-200"
                   style={{
                     color: !hasFilters ? '#E0E0FF' : '#7070AA',
                     background: !hasFilters ? 'rgba(0,245,255,0.12)' : 'transparent',
@@ -419,7 +439,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                     <button
                       key={r.key}
                       onClick={() => toggleRegion(r.key)}
-                      className="px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all duration-200"
+                      className="px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-[9px] md:text-[10px] font-mono tracking-wider uppercase transition-all duration-200"
                       style={{
                         color: isActive ? '#E0E0FF' : '#7070AA',
                         background: isActive ? 'rgba(0,245,255,0.12)' : 'transparent',
@@ -442,7 +462,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                     <button
                       key={t.key}
                       onClick={() => toggleTier(t.key)}
-                      className="flex items-center gap-1.5 px-2.5 py-1 rounded-md text-[10px] font-mono tracking-wider uppercase transition-all duration-200"
+                      className="flex items-center gap-1.5 px-2 py-0.5 md:px-2.5 md:py-1 rounded-md text-[9px] md:text-[10px] font-mono tracking-wider uppercase transition-all duration-200"
                       style={{
                         color: isActive ? t.color : '#7070AA',
                         background: isActive ? `${t.color}15` : 'transparent',
@@ -465,36 +485,40 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
             </div>
           </div>
 
-          {/* Summary stats bar */}
+          {/* Summary stats bar — inline on mobile, grid on desktop */}
           {stats && (
-            <div className="grid grid-cols-3 gap-3 px-6 py-3 border-b border-[rgba(0,245,255,0.08)]">
-              <div className="rounded-lg px-3 py-2 border border-[rgba(0,245,255,0.1)]"
+            <div className="flex md:grid md:grid-cols-3 gap-2 md:gap-3 px-4 py-2 md:px-6 md:py-3
+              border-b border-[rgba(0,245,255,0.08)] overflow-x-auto max-md:scrollbar-none"
+              style={{ WebkitOverflowScrolling: 'touch' }}>
+              <div className="rounded-lg px-3 py-1.5 md:py-2 border border-[rgba(0,245,255,0.1)] max-md:flex-shrink-0 max-md:min-w-[120px]"
                 style={{ background: 'rgba(0,245,255,0.04)' }}>
-                <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">Avg USDT Premium</div>
-                <div className="text-sm font-mono font-bold"
+                <div className="text-[8px] md:text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">Avg USDT</div>
+                <div className="text-xs md:text-sm font-mono font-bold"
                   style={{ color: stats.avgUsdt !== null ? getPremiumColor(stats.avgUsdt) : '#7070AA' }}>
                   {stats.avgUsdt !== null ? `${stats.avgUsdt >= 0 ? '+' : ''}${stats.avgUsdt.toFixed(1)}%` : '—'}
                 </div>
               </div>
-              <div className="rounded-lg px-3 py-2 border border-[rgba(0,245,255,0.1)]"
+              <div className="rounded-lg px-3 py-1.5 md:py-2 border border-[rgba(0,245,255,0.1)] max-md:flex-shrink-0 max-md:min-w-[140px]"
                 style={{ background: 'rgba(0,245,255,0.04)' }}>
-                <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">Highest Premium</div>
-                <div className="text-sm font-mono font-bold"
+                <div className="text-[8px] md:text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">Highest</div>
+                <div className="text-xs md:text-sm font-mono font-bold whitespace-nowrap"
                   style={{ color: stats.highestPct !== null ? getPremiumColor(stats.highestPct) : '#7070AA' }}>
                   {stats.highestCountry && stats.highestPct !== null
                     ? `${stats.highestCountry} ${stats.highestPct >= 0 ? '+' : ''}${stats.highestPct.toFixed(1)}%`
                     : '—'}
                 </div>
                 {stats.highestAsset && (
-                  <div className="text-[8px] font-mono text-[#7070AA] mt-0.5">{stats.highestAsset}</div>
+                  <div className="text-[7px] md:text-[8px] font-mono text-[#7070AA] mt-0.5">{stats.highestAsset}</div>
                 )}
               </div>
-              <HighDemandCard count={stats.highDemand} names={stats.highDemandNames} />
+              <div className="max-md:flex-shrink-0 max-md:min-w-[110px]">
+                <HighDemandCard count={stats.highDemand} names={stats.highDemandNames} />
+              </div>
             </div>
           )}
 
           {/* Column headers — clickable for sorting */}
-          <div className="flex items-center gap-4 px-10 py-2 border-b border-[rgba(0,245,255,0.08)]">
+          <div className="flex items-center gap-2 md:gap-4 px-4 md:px-10 py-1.5 md:py-2 border-b border-[rgba(0,245,255,0.08)]">
             <button
               onClick={() => handleSort('country')}
               className={`flex-1 text-left ${headerBtnClass} justify-start ${sortKey === 'country' ? 'text-[#00F5FF]' : 'text-[#7070AA]'}`}
@@ -504,14 +528,14 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
             </button>
             <button
               onClick={() => handleSort('usdt')}
-              className={`w-20 ${headerBtnClass} ${sortKey === 'usdt' ? 'text-[#00F5FF]' : 'text-[#7070AA]'}`}
+              className={`w-16 md:w-20 ${headerBtnClass} ${sortKey === 'usdt' ? 'text-[#00F5FF]' : 'text-[#7070AA]'}`}
             >
               USDT
               <SortArrow active={sortKey === 'usdt'} dir={sortDir} />
             </button>
             <button
               onClick={() => handleSort('usdc')}
-              className={`w-20 ${headerBtnClass} ${sortKey === 'usdc' ? 'text-[#00F5FF]' : 'text-[#7070AA]'}`}
+              className={`w-16 md:w-20 ${headerBtnClass} ${sortKey === 'usdc' ? 'text-[#00F5FF]' : 'text-[#7070AA]'}`}
             >
               USDC
               <SortArrow active={sortKey === 'usdc'} dir={sortDir} />
@@ -540,24 +564,24 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
             return (
               <motion.div
                 key={premium.iso2}
-                className="flex items-center gap-4 px-4 py-3 rounded-lg
+                className="flex items-center gap-2 md:gap-4 px-2 md:px-4 py-2.5 md:py-3 rounded-lg
                   hover:bg-[rgba(0,245,255,0.05)] transition-colors"
                 initial={{ opacity: 0, x: 10 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.3, delay: 0.3 + i * 0.02 }}
               >
                 {/* Flag */}
-                <div className="w-6 flex-shrink-0 flex items-center justify-center">
+                <div className="w-5 md:w-6 flex-shrink-0 flex items-center justify-center">
                   <FlagImg iso2={premium.iso2} />
                 </div>
 
                 {/* Country + fiat */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center">
-                    <span className="text-sm text-[#E0E0FF]">{premium.country}</span>
-                    {hasNotableSpread && <SpreadBadge />}
+                    <span className="text-xs md:text-sm text-[#E0E0FF] truncate">{premium.country}</span>
+                    {hasNotableSpread && <span className="hidden md:inline-flex"><SpreadBadge /></span>}
                   </div>
-                  <span className="text-[10px] font-mono text-[#7070AA]/70">
+                  <span className="text-[9px] md:text-[10px] font-mono text-[#7070AA]/70">
                     {premium.officialRate
                       ? `$1 = ${premium.officialRate.toLocaleString('en-US', { maximumFractionDigits: premium.officialRate >= 100 ? 0 : 2 })} ${premium.fiat}`
                       : premium.fiat}
@@ -567,7 +591,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                 {/* USDT premium badge or No data */}
                 {premium.usdtPremiumPct !== null ? (
                   <div
-                    className="flex-shrink-0 w-20 py-1.5 rounded text-xs font-mono tracking-wider text-center"
+                    className="flex-shrink-0 w-16 md:w-20 py-1 md:py-1.5 rounded text-[11px] md:text-xs font-mono tracking-wider text-center"
                     style={{
                       color: usdtColor,
                       backgroundColor: `${usdtColor}15`,
@@ -577,13 +601,13 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                     {formatPremium(premium.usdtPremiumPct)}
                   </div>
                 ) : (
-                  <div className="flex-shrink-0 w-20" style={{ border: 'none', background: 'transparent' }}><NoDataBadge /></div>
+                  <div className="flex-shrink-0 w-16 md:w-20" style={{ border: 'none', background: 'transparent' }}><NoDataBadge /></div>
                 )}
 
                 {/* USDC premium badge or No data */}
                 {premium.usdcPremiumPct !== null ? (
                   <div
-                    className="flex-shrink-0 w-20 py-1.5 rounded text-xs font-mono tracking-wider text-center"
+                    className="flex-shrink-0 w-16 md:w-20 py-1 md:py-1.5 rounded text-[11px] md:text-xs font-mono tracking-wider text-center"
                     style={{
                       color: usdcColor,
                       backgroundColor: `${usdcColor}15`,
@@ -593,7 +617,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                     {formatPremium(premium.usdcPremiumPct)}
                   </div>
                 ) : (
-                  <div className="flex-shrink-0 w-20" style={{ border: 'none', background: 'transparent' }}><NoDataBadge /></div>
+                  <div className="flex-shrink-0 w-16 md:w-20" style={{ border: 'none', background: 'transparent' }}><NoDataBadge /></div>
                 )}
               </motion.div>
             );
@@ -601,8 +625,8 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
         )}
 
             {/* Disclaimer footer */}
-            <div className="px-2 py-3 mt-2 border-t border-[rgba(0,245,255,0.1)]">
-              <p className="text-[10px] text-[#7070AA] leading-relaxed">
+            <div className="px-1 md:px-2 py-2 md:py-3 mt-1 md:mt-2 border-t border-[rgba(0,245,255,0.1)]">
+              <p className="text-[9px] md:text-[10px] text-[#7070AA] leading-relaxed">
                 Binance/Bybit P2P median price vs official FX rate. Not financial advice. Refreshed every 15 min.
               </p>
             </div>

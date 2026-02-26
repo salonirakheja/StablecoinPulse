@@ -234,8 +234,8 @@ function HomeContent() {
 
       {/* Premium view — card floats above the globe starfield */}
       {activeView === 'globe' && viewMode === 'premium' && (
-        <div className="absolute inset-0 z-[15] flex items-center justify-center pt-16 md:pt-20 pb-16 pointer-events-none">
-          <div className="pointer-events-auto max-h-full flex">
+        <div className="absolute inset-0 z-[15] flex items-start md:items-center justify-center pt-[88px] md:pt-20 pb-4 md:pb-16 pointer-events-none">
+          <div className="pointer-events-auto max-h-full flex overflow-hidden">
             <PremiumPanel
               isOpen={true}
               onToggle={() => {}}
