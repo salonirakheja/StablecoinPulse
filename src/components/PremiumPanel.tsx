@@ -294,16 +294,25 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
     const avgUsdt = withUsdt.length > 0
       ? withUsdt.reduce((sum, p) => sum + p.usdtPremiumPct!, 0) / withUsdt.length
       : null;
-    const highest = withUsdt.length > 0
-      ? withUsdt.reduce((max, p) => (p.usdtPremiumPct! > (max.usdtPremiumPct ?? -Infinity) ? p : max), withUsdt[0])
-      : null;
+    // Highest premium across either USDT or USDC
+    let highestCountry: string | null = null;
+    let highestPct: number | null = null;
+    let highestAsset: string | null = null;
+    for (const p of data.premiums) {
+      if (p.usdtPremiumPct !== null && (highestPct === null || p.usdtPremiumPct > highestPct)) {
+        highestPct = p.usdtPremiumPct; highestCountry = p.country; highestAsset = 'USDT';
+      }
+      if (p.usdcPremiumPct !== null && (highestPct === null || p.usdcPremiumPct > highestPct)) {
+        highestPct = p.usdcPremiumPct; highestCountry = p.country; highestAsset = 'USDC';
+      }
+    }
     const highDemandCountries = data.premiums.filter(p =>
       (p.usdtPremiumPct !== null && p.usdtPremiumPct >= 5) ||
       (p.usdcPremiumPct !== null && p.usdcPremiumPct >= 5)
     );
     const highDemand = highDemandCountries.length;
     const highDemandNames = highDemandCountries.map(p => p.country);
-    return { avgUsdt, highest, highDemand, highDemandNames };
+    return { avgUsdt, highestCountry, highestPct, highestAsset, highDemand, highDemandNames };
   }, [data]);
 
   const headerBtnClass = "flex items-center justify-center gap-0.5 text-[10px] font-mono tracking-wider uppercase cursor-pointer transition-colors hover:text-[#00F5FF] border-none bg-transparent outline-none p-0";
@@ -469,11 +478,14 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                 style={{ background: 'rgba(0,245,255,0.04)' }}>
                 <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">Highest Premium</div>
                 <div className="text-sm font-mono font-bold"
-                  style={{ color: stats.highest ? getPremiumColor(stats.highest.usdtPremiumPct) : '#7070AA' }}>
-                  {stats.highest
-                    ? `${stats.highest.country} ${stats.highest.usdtPremiumPct! >= 0 ? '+' : ''}${stats.highest.usdtPremiumPct!.toFixed(1)}%`
+                  style={{ color: stats.highestPct !== null ? getPremiumColor(stats.highestPct) : '#7070AA' }}>
+                  {stats.highestCountry && stats.highestPct !== null
+                    ? `${stats.highestCountry} ${stats.highestPct >= 0 ? '+' : ''}${stats.highestPct.toFixed(1)}%`
                     : '—'}
                 </div>
+                {stats.highestAsset && (
+                  <div className="text-[8px] font-mono text-[#7070AA] mt-0.5">{stats.highestAsset}</div>
+                )}
               </div>
               <HighDemandCard count={stats.highDemand} names={stats.highDemandNames} />
             </div>
