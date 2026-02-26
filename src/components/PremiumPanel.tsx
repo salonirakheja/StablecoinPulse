@@ -365,7 +365,9 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
               className="text-lg font-mono font-bold text-[#E0E0FF] mb-1"
               style={{ textShadow: '0 0 10px rgba(0,245,255,0.3)' }}
             >
-              {`${data?.countriesWithData ?? 0} of ${data?.countriesTracked ?? 16} countries with data`}
+              {data && data.countriesWithData < data.countriesTracked
+                ? `${data.countriesWithData} of ${data.countriesTracked} countries with data`
+                : `${data?.countriesTracked ?? 16} countries tracked`}
             </p>
             {data?.lastUpdated && (
               <p className="text-[10px] font-mono text-[#7070AA] mb-2">
