@@ -1,6 +1,6 @@
 export type StablecoinFilter = 'all' | 'usdt' | 'usdc' | 'dai';
 export type TimePeriod = '24h' | '7d' | '30d';
-export type ViewMode = 'volume' | 'regulation';
+export type ViewMode = 'volume' | 'regulation' | 'premium';
 export type RegulationStatus = 'regulated' | 'partial' | 'restricted' | 'unclear';
 
 export interface CoinGeckoExchange {

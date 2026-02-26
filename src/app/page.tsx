@@ -4,11 +4,13 @@ import { Suspense, useState, useEffect, useCallback } from 'react';
 import dynamic from 'next/dynamic';
 import { useSearchParams } from 'next/navigation';
 import { StablecoinFilter, ViewMode, VolumeApiResponse } from '@/lib/types';
+import type { PremiumApiResponse } from '@/app/api/premium/route';
 import BackgroundGrid from '@/components/BackgroundGrid';
 import LoadingScreen from '@/components/LoadingScreen';
 import GlobeControls from '@/components/GlobeControls';
 import VolumePanel from '@/components/VolumePanel';
 import RegulationPanel from '@/components/RegulationPanel';
+import PremiumPanel from '@/components/PremiumPanel';
 import VolumeTicker from '@/components/VolumeTicker';
 import ShareButton from '@/components/ShareButton';
 import ViewModeToggle from '@/components/ViewModeToggle';
@@ -27,7 +29,8 @@ function getInitialView(searchParams: URLSearchParams): { activeView: ActiveView
   const path = typeof window !== 'undefined' ? window.location.pathname : '/';
   if (path === '/blog') return { activeView: 'blog', viewMode: 'volume' };
   if (path === '/about') return { activeView: 'about', viewMode: 'volume' };
-  const viewMode = searchParams.get('view') === 'regulation' ? 'regulation' : 'volume';
+  const view = searchParams.get('view');
+  const viewMode: ViewMode = view === 'regulation' ? 'regulation' : view === 'premium' ? 'premium' : 'volume';
   return { activeView: 'globe', viewMode };
 }
 
@@ -48,17 +51,21 @@ function HomeContent() {
   const [activeView, setActiveView] = useState<ActiveView>(initial.activeView);
   const [mapLoaded, setMapLoaded] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
+  const [premiumData, setPremiumData] = useState<PremiumApiResponse | null>(null);
+  const [premiumLoading, setPremiumLoading] = useState(false);
 
   const navigateTo = useCallback((view: ActiveView, mode?: ViewMode) => {
     setActiveView(view);
     if (mode) setViewMode(mode);
 
+    const effectiveMode = mode || viewMode;
     let url = '/';
     if (view === 'blog') url = '/blog';
     else if (view === 'about') url = '/about';
-    else if (mode === 'regulation' || (!mode && viewMode === 'regulation')) url = '/?view=regulation';
+    else if (effectiveMode === 'regulation') url = '/?view=regulation';
+    else if (effectiveMode === 'premium') url = '/?view=premium';
 
-    window.history.pushState({ view, mode: mode || viewMode }, '', url);
+    window.history.pushState({ view, mode: effectiveMode }, '', url);
   }, [viewMode]);
 
   // Handle browser back/forward
@@ -77,7 +84,8 @@ function HomeContent() {
         } else {
           setActiveView('globe');
           const params = new URLSearchParams(window.location.search);
-          setViewMode(params.get('view') === 'regulation' ? 'regulation' : 'volume');
+          const v = params.get('view');
+          setViewMode(v === 'regulation' ? 'regulation' : v === 'premium' ? 'premium' : 'volume');
         }
       }
     }
@@ -118,6 +126,23 @@ function HomeContent() {
     return () => clearInterval(interval);
   }, [filter]);
 
+  // Lazy-fetch premium data when premium view is active
+  useEffect(() => {
+    if (viewMode !== 'premium') return;
+    if (premiumData) return; // Already fetched
+
+    setPremiumLoading(true);
+    fetch('/api/premium')
+      .then((res) => res.json())
+      .then((json) => {
+        if (json.premiums) {
+          setPremiumData(json);
+        }
+      })
+      .catch((err) => console.error('Failed to fetch premium data:', err))
+      .finally(() => setPremiumLoading(false));
+  }, [viewMode, premiumData]);
+
   // Close panel when switching view modes
   useEffect(() => {
     setPanelOpen(false);
@@ -128,7 +153,7 @@ function HomeContent() {
     if (activeView !== 'globe') {
       setActiveView('globe');
     }
-    const url = mode === 'regulation' ? '/?view=regulation' : '/';
+    const url = mode === 'regulation' ? '/?view=regulation' : mode === 'premium' ? '/?view=premium' : '/';
     window.history.pushState({ view: 'globe', mode }, '', url);
   }, [activeView]);
 
@@ -140,7 +165,9 @@ function HomeContent() {
       ? 'ABOUT'
       : viewMode === 'volume'
         ? 'GLOBAL VOLUME HEATMAP'
-        : 'REGULATION MAP';
+        : viewMode === 'regulation'
+          ? 'REGULATION MAP'
+          : 'DOLLAR PREMIUM INDEX';
 
   const navButtonClass = (view: ActiveView) =>
     `px-3 py-1.5 max-md:px-2.5 rounded-lg text-[10px] md:text-xs font-mono tracking-wider backdrop-blur-md border transition-all duration-200 cursor-pointer ${
@@ -173,17 +200,15 @@ function HomeContent() {
       {/* Panel skeleton — show while globe is loading */}
       {activeView === 'globe' && isLoading && <PanelSkeleton />}
 
-      {/* Globe UI overlays — only show when globe is active and loaded */}
-      {activeView === 'globe' && !isLoading && data && (
+      {/* Globe UI overlays — only show when globe is active, loaded, and NOT premium */}
+      {activeView === 'globe' && !isLoading && data && viewMode !== 'premium' && (
         <>
-          {/* Controls — hide stablecoin filter in regulation mode */}
           <GlobeControls
             filter={filter}
             onFilterChange={setFilter}
             viewMode={viewMode}
           />
 
-          {/* Panel — conditionally render volume or regulation panel */}
           {viewMode === 'volume' ? (
             <VolumePanel
               topCountries={data.topCountries}
@@ -200,9 +225,25 @@ function HomeContent() {
             />
           )}
 
-          {/* Bottom ticker */}
-          <VolumeTicker globalVolume={data.globalVolume} viewMode={viewMode} />
+          <VolumeTicker
+            globalVolume={data.globalVolume}
+            viewMode={viewMode}
+          />
         </>
+      )}
+
+      {/* Premium view — card floats above the globe starfield */}
+      {activeView === 'globe' && viewMode === 'premium' && (
+        <div className="absolute inset-0 z-[15] flex items-center justify-center pt-16 md:pt-20 pb-16 pointer-events-none">
+          <div className="pointer-events-auto max-h-full flex">
+            <PremiumPanel
+              isOpen={true}
+              onToggle={() => {}}
+              data={premiumData}
+              loading={premiumLoading}
+            />
+          </div>
+        </div>
       )}
 
       {/* Top bar — always visible */}
@@ -261,15 +302,15 @@ function HomeContent() {
             )}
           </div>
 
-          {/* Mobile-only: 24H Rolling indicator strip */}
-          {activeView === 'globe' && viewMode === 'volume' && (
+          {/* Mobile-only: context indicator strip */}
+          {activeView === 'globe' && (viewMode === 'volume' || viewMode === 'premium') && (
             <div className="md:hidden flex items-center justify-center gap-1.5 w-full py-1">
               <div
                 className="w-1.5 h-1.5 rounded-full bg-[#00F5FF] flex-shrink-0"
                 style={{ boxShadow: '0 0 6px #00F5FF' }}
               />
               <span className="text-[10px] tracking-widest text-[#7070AA] uppercase font-mono">
-                24H Rolling Volume
+                {viewMode === 'volume' ? '24H Rolling Volume' : 'Binance P2P vs Official FX'}
               </span>
             </div>
           )}

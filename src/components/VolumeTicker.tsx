@@ -5,9 +5,17 @@ import { useEffect, useState } from 'react';
 import { ViewMode } from '@/lib/types';
 import { getRegulationStats } from '@/data/stablecoin-regulations';
 
+interface PremiumTickerData {
+  countriesTracked: number;
+  countriesWithData: number;
+  highestCountry: string | null;
+  highestPremium: number | null;
+}
+
 interface VolumeTickerProps {
   globalVolume: number;
   viewMode: ViewMode;
+  premiumTicker?: PremiumTickerData | null;
 }
 
 function AnimatedNumber({ value }: { value: number }) {
@@ -27,7 +35,7 @@ function AnimatedNumber({ value }: { value: number }) {
   return <motion.span>{display}</motion.span>;
 }
 
-export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerProps) {
+export default function VolumeTicker({ globalVolume, viewMode, premiumTicker }: VolumeTickerProps) {
   const [showMethodology, setShowMethodology] = useState(false);
   const [showRegAbout, setShowRegAbout] = useState(false);
   const regulationStats = viewMode === 'regulation' ? getRegulationStats() : null;
@@ -95,7 +103,7 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
                 HOW?
               </button>
             </>
-          ) : (
+          ) : viewMode === 'regulation' ? (
             /* Regulation summary stats */
             regulationStats && (
               <>
@@ -136,6 +144,32 @@ export default function VolumeTicker({ globalVolume, viewMode }: VolumeTickerPro
                 </button>
               </>
             )
+          ) : (
+            /* Premium summary stats */
+            <>
+              <span className="text-[10px] tracking-[0.15em] text-[#7070AA] uppercase max-md:hidden">
+                {premiumTicker?.countriesTracked ?? 16} countries tracked
+              </span>
+              <span className="text-[10px] tracking-[0.15em] text-[#7070AA] uppercase md:hidden">
+                {premiumTicker?.countriesTracked ?? 16} tracked
+              </span>
+              {premiumTicker?.highestCountry && premiumTicker.highestPremium !== null && (
+                <>
+                  <span className="text-[10px] font-mono text-[#7070AA]">|</span>
+                  <span className="text-[10px] tracking-[0.15em] text-[#7070AA] uppercase max-md:hidden">
+                    Highest:
+                  </span>
+                  <span
+                    className="text-sm md:text-base font-mono font-bold text-[#FF1493]"
+                    style={{ textShadow: '0 0 10px rgba(255,20,147,0.5)' }}
+                  >
+                    {premiumTicker.highestCountry} +{premiumTicker.highestPremium.toFixed(1)}%
+                  </span>
+                </>
+              )}
+              <span className="text-[10px] font-mono text-[#7070AA]">|</span>
+              <span className="text-[9px] text-[#7070AA] font-mono">Binance P2P vs FX</span>
+            </>
           )}
         </div>
       </motion.div>

@@ -571,7 +571,7 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
                   y: e.point.y,
                 });
               }
-            } else {
+            } else if (viewModeRef.current === 'volume') {
               // Volume mode: show volume card
               const volumeData = findVolumeData(iso2);
               if (volumeData) {
@@ -602,6 +602,7 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
                 });
               }
             }
+            // Premium mode: no popup on country click (data is in the panel)
           }
         });
 
@@ -615,13 +616,15 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
         });
 
         // Apply initial viewMode visibility (useEffect may have fired before map was ready)
-        const isRegulation = viewModeRef.current === 'regulation';
-        if (isRegulation) {
+        const initialMode = viewModeRef.current;
+        if (initialMode !== 'volume') {
           for (const layerId of VOLUME_LAYERS) {
             if (map.getLayer(layerId)) {
               map.setLayoutProperty(layerId, 'visibility', 'none');
             }
           }
+        }
+        if (initialMode === 'regulation') {
           for (const layerId of REGULATION_LAYERS) {
             if (map.getLayer(layerId)) {
               map.setLayoutProperty(layerId, 'visibility', 'visible');
@@ -687,19 +690,25 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
     const map = mapRef.current;
     if (!map || !map.isStyleLoaded()) return;
 
-    const isRegulation = viewMode === 'regulation';
+    // Ensure map dimensions are correct after any view mode change.
+    requestAnimationFrame(() => {
+      map.resize();
+    });
 
-    // Toggle volume layers
+    const showVolume = viewMode === 'volume';
+    const showRegulation = viewMode === 'regulation';
+
+    // Toggle volume layers (hidden in regulation AND premium modes)
     for (const layerId of VOLUME_LAYERS) {
       if (map.getLayer(layerId)) {
-        map.setLayoutProperty(layerId, 'visibility', isRegulation ? 'none' : 'visible');
+        map.setLayoutProperty(layerId, 'visibility', showVolume ? 'visible' : 'none');
       }
     }
 
-    // Toggle regulation layers
+    // Toggle regulation layers (only in regulation mode)
     for (const layerId of REGULATION_LAYERS) {
       if (map.getLayer(layerId)) {
-        map.setLayoutProperty(layerId, 'visibility', isRegulation ? 'visible' : 'none');
+        map.setLayoutProperty(layerId, 'visibility', showRegulation ? 'visible' : 'none');
       }
     }
   }, [viewMode]);

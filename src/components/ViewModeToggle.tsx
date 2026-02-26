@@ -19,7 +19,7 @@ export default function ViewModeToggle({ viewMode, onViewModeChange, inactive }:
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: 0.2 }}
     >
-      {(['volume', 'regulation'] as const).map((mode) => (
+      {(['volume', 'regulation', 'premium'] as const).map((mode) => (
         <button
           key={mode}
           onClick={() => onViewModeChange(mode)}
@@ -42,7 +42,7 @@ export default function ViewModeToggle({ viewMode, onViewModeChange, inactive }:
             />
           )}
           <span className="relative z-10">
-            {mode === 'volume' ? 'VOLUME' : 'REGULATION'}
+            {mode === 'volume' ? 'VOLUME' : mode === 'regulation' ? 'REGULATION' : 'PREMIUM'}
           </span>
         </button>
       ))}

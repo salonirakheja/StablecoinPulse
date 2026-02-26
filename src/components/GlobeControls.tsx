@@ -84,7 +84,7 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
             </span>
           </div>
         </>
-      ) : (
+      ) : viewMode === 'regulation' ? (
         /* Regulation legend */
         <div
           className="flex flex-col gap-2 p-3 rounded-xl backdrop-blur-md
@@ -106,6 +106,37 @@ export default function GlobeControls({ filter, onFilterChange, viewMode }: Glob
               />
               <span className="text-[10px] font-mono text-[#E0E0FF] tracking-wider uppercase max-md:text-[8px]">
                 {REGULATION_LABELS[status]}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : (
+        /* Premium legend */
+        <div
+          className="flex flex-col gap-2 p-3 rounded-xl backdrop-blur-md
+            max-md:flex-row max-md:flex-wrap max-md:gap-x-3 max-md:gap-y-1 max-md:p-2 max-md:items-center
+            border border-[rgba(0,245,255,0.12)]"
+          style={{ background: 'rgba(5, 5, 25, 0.75)' }}
+        >
+          <span className="text-[10px] tracking-widest text-[#7070AA] uppercase px-1 max-md:hidden">
+            Premium
+          </span>
+          {[
+            { label: 'At Par', color: '#A0A0B8' },
+            { label: 'Low', color: '#00F5FF' },
+            { label: 'Moderate', color: '#FFB800' },
+            { label: 'High', color: '#FF1493' },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center gap-2 px-1 max-md:gap-1 max-md:px-0">
+              <div
+                className="w-2 h-2 rounded-full flex-shrink-0"
+                style={{
+                  backgroundColor: item.color,
+                  boxShadow: `0 0 6px ${item.color}60`,
+                }}
+              />
+              <span className="text-[10px] font-mono text-[#E0E0FF] tracking-wider uppercase max-md:text-[8px]">
+                {item.label}
               </span>
             </div>
           ))}
