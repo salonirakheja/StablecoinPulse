@@ -39,22 +39,20 @@ export default function PageNavHeader({ activePage }: { activePage: ActivePage }
           >
             REGULATION
           </Link>
-          {activePage === 'blog' ? (
-            <span
-              className={navButtonClass('blog')}
-              style={{ background: 'rgba(5, 5, 25, 0.6)' }}
-            >
-              BLOG
-            </span>
-          ) : (
-            <Link
-              href="/blog"
-              className={navButtonClass('blog')}
-              style={{ background: 'rgba(5, 5, 25, 0.6)' }}
-            >
-              BLOG
-            </Link>
-          )}
+          <Link
+            href="/?view=premium"
+            className="px-3 py-1.5 rounded-lg text-[10px] md:text-xs font-mono tracking-wider backdrop-blur-md border border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)] transition-all duration-200"
+            style={{ background: 'rgba(5, 5, 25, 0.6)' }}
+          >
+            PREMIUM
+          </Link>
+          <Link
+            href="/blog"
+            className={navButtonClass('blog')}
+            style={{ background: 'rgba(5, 5, 25, 0.6)' }}
+          >
+            BLOG
+          </Link>
           {activePage === 'about' ? (
             <span
               className={navButtonClass('about')}

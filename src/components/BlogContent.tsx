@@ -4,6 +4,14 @@ import Link from 'next/link';
 
 const posts = [
   {
+    slug: 'stablecoin-premiums-emerging-markets',
+    title: 'The Real Price of $1: Stablecoin Premiums Across Emerging Markets',
+    date: '2026-02-26',
+    description:
+      'In Turkey, $1 of USDC costs $1.18. In India, $1.13. We tracked USDT and USDC premiums across 16 emerging markets to measure the real cost of accessing dollar-pegged stablecoins.',
+    readingTime: '8 min read',
+  },
+  {
     slug: 'stablecoin-regulations-by-country-2025',
     title: 'Stablecoin Regulations by Country (2025)',
     date: '2025-02-20',

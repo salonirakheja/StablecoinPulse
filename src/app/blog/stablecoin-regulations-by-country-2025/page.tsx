@@ -74,8 +74,19 @@ export default function RegulationsPostPage() {
 
       {/* Article */}
       <article className="px-6 md:px-16 lg:px-24 pb-20">
+        {/* Back link */}
+        <Link
+          href="/blog"
+          className="inline-flex items-center gap-1.5 text-[11px] font-mono tracking-wider text-[#7070AA] hover:text-[#00F5FF] transition-colors mt-6"
+        >
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="shrink-0">
+            <path d="M19 12H5M12 19l-7-7 7-7" />
+          </svg>
+          ALL POSTS
+        </Link>
+
         {/* Title block */}
-        <header className="relative pt-20 pb-12 overflow-hidden">
+        <header className="relative pt-8 pb-12 overflow-hidden">
           <div
             className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] opacity-30 blur-[100px] pointer-events-none"
             style={{ background: 'radial-gradient(ellipse, rgba(0,245,255,0.4) 0%, rgba(77,77,255,0.2) 50%, transparent 70%)' }}

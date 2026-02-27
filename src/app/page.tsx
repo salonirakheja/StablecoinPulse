@@ -12,7 +12,6 @@ import VolumePanel from '@/components/VolumePanel';
 import RegulationPanel from '@/components/RegulationPanel';
 import PremiumPanel from '@/components/PremiumPanel';
 import VolumeTicker from '@/components/VolumeTicker';
-import ShareButton from '@/components/ShareButton';
 import ViewModeToggle from '@/components/ViewModeToggle';
 import BlogContent from '@/components/BlogContent';
 import AboutContent from '@/components/AboutContent';
@@ -293,14 +292,6 @@ function HomeContent() {
             >
               ABOUT
             </button>
-            {activeView === 'globe' && data && (
-              <div className="max-md:hidden">
-                <ShareButton
-                  topCountries={data.topCountries}
-                  globalVolume={data.globalVolume}
-                />
-              </div>
-            )}
           </div>
 
           {/* Mobile-only: context indicator strip — volume only (premium has its own card header) */}
