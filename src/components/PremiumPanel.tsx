@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import type { PremiumApiResponse } from '@/app/api/premium/route';
 import type { CountryPremium } from '@/app/api/premium/route';
+import { PREMIUM_DRIVERS } from '@/data/premium-drivers';
 
 interface PremiumPanelProps {
   isOpen: boolean;
@@ -104,34 +106,46 @@ function SortArrow({ active, dir }: { active: boolean; dir: SortDir }) {
 // --- Notable spread badge with tooltip ---
 function SpreadBadge() {
   const [show, setShow] = useState(false);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+  const pillRef = useRef<HTMLDivElement>(null);
+
+  const handleEnter = useCallback(() => {
+    if (pillRef.current) {
+      const rect = pillRef.current.getBoundingClientRect();
+      setPos({ top: rect.bottom + 4, left: rect.left });
+    }
+    setShow(true);
+  }, []);
+
   return (
-    <div className="relative inline-flex items-center ml-1.5">
+    <div className="inline-flex items-center ml-1.5">
       <div
+        ref={pillRef}
         className="flex items-center gap-1 px-1.5 py-0.5 rounded text-[8px] font-mono tracking-wider
           text-[#FFB800] bg-[rgba(255,184,0,0.1)] border border-[rgba(255,184,0,0.25)] cursor-default"
-        onMouseEnter={() => setShow(true)}
+        onMouseEnter={handleEnter}
         onMouseLeave={() => setShow(false)}
       >
         Notable spread
       </div>
-      <AnimatePresence>
-        {show && (
+      {show && createPortal(
+        <AnimatePresence>
           <motion.div
-            className="absolute bottom-full mb-2 left-1/2 -translate-x-1/2 z-50
-              px-3 py-2 rounded-lg text-[10px] leading-relaxed text-[#E0E0FF] font-mono
-              whitespace-nowrap backdrop-blur-xl border border-[rgba(0,245,255,0.15)]"
-            style={{ background: 'rgba(5, 5, 25, 0.95)', boxShadow: '0 0 15px rgba(0,245,255,0.1)' }}
-            initial={{ opacity: 0, y: 4 }}
+            className="fixed z-[9999] px-3 py-2 rounded-lg text-[10px] leading-relaxed text-[#E0E0FF] font-mono
+              whitespace-nowrap backdrop-blur-xl border border-[rgba(0,245,255,0.15)] pointer-events-none"
+            style={{ top: pos.top, left: pos.left, background: 'rgba(5, 5, 25, 0.95)', boxShadow: '0 0 15px rgba(0,245,255,0.1)' }}
+            initial={{ opacity: 0, y: -4 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 4 }}
+            exit={{ opacity: 0, y: -4 }}
             transition={{ duration: 0.15 }}
           >
             USDC trades at a significantly higher premium
             <br />
             than USDT — may indicate limited USDC liquidity.
           </motion.div>
-        )}
-      </AnimatePresence>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
@@ -210,6 +224,74 @@ function NoDataBadge() {
           </motion.div>
         )}
       </AnimatePresence>
+    </div>
+  );
+}
+
+// --- Country driver badge with tooltip (fixed positioning to escape overflow) ---
+function DriverBadge({ iso2 }: { iso2: string }) {
+  const driver = PREMIUM_DRIVERS[iso2];
+  const [show, setShow] = useState(false);
+  const [pos, setPos] = useState({ top: 0, left: 0 });
+  const pillRef = useRef<HTMLDivElement>(null);
+
+  const handleEnter = useCallback(() => {
+    if (pillRef.current) {
+      const rect = pillRef.current.getBoundingClientRect();
+      setPos({
+        top: rect.bottom + 4,
+        left: rect.left,
+      });
+    }
+    setShow(true);
+  }, []);
+
+  if (!driver) return null;
+  return (
+    <div className="inline-flex items-center">
+      <div
+        ref={pillRef}
+        className="flex items-center gap-1 px-1.5 py-px rounded text-[7px] md:text-[8px] font-mono tracking-wider cursor-default"
+        style={{
+          color: driver.color,
+          background: `${driver.color}12`,
+          border: `1px solid ${driver.color}25`,
+        }}
+        onMouseEnter={handleEnter}
+        onMouseLeave={() => setShow(false)}
+        onTouchStart={() => { handleEnter(); setShow(s => !s); }}
+      >
+        {driver.label}
+        <svg width="7" height="7" viewBox="0 0 24 24" fill="none" stroke={driver.color} strokeWidth="2.5" className="flex-shrink-0 opacity-60">
+          <circle cx="12" cy="12" r="10" />
+          <line x1="12" y1="8" x2="12" y2="8" strokeLinecap="round" />
+          <line x1="12" y1="12" x2="12" y2="16" strokeLinecap="round" />
+        </svg>
+      </div>
+      {show && createPortal(
+        <AnimatePresence>
+          <motion.div
+            className="fixed z-[9999] px-3 py-2 rounded-lg text-[10px] leading-relaxed text-[#E0E0FF] font-mono
+              backdrop-blur-xl border border-[rgba(0,245,255,0.15)] pointer-events-none"
+            style={{
+              top: pos.top,
+              left: pos.left,
+              background: 'rgba(5, 5, 25, 0.95)',
+              boxShadow: `0 0 15px ${driver.color}20`,
+              width: '220px',
+              whiteSpace: 'normal',
+            }}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.15 }}
+          >
+            <div className="font-bold mb-1" style={{ color: driver.color }}>{driver.label}</div>
+            {driver.explanation}
+          </motion.div>
+        </AnimatePresence>,
+        document.body
+      )}
     </div>
   );
 }
@@ -581,11 +663,14 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                     <span className="text-xs md:text-sm text-[#E0E0FF] truncate">{premium.country}</span>
                     {hasNotableSpread && <span className="hidden md:inline-flex"><SpreadBadge /></span>}
                   </div>
-                  <span className="text-[9px] md:text-[10px] font-mono text-[#7070AA]/70">
-                    {premium.officialRate
-                      ? `$1 = ${premium.officialRate.toLocaleString('en-US', { maximumFractionDigits: premium.officialRate >= 100 ? 0 : 2 })} ${premium.fiat}`
-                      : premium.fiat}
-                  </span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="text-[9px] md:text-[10px] font-mono text-[#7070AA]/70">
+                      {premium.officialRate
+                        ? `$1 = ${premium.officialRate.toLocaleString('en-US', { maximumFractionDigits: premium.officialRate >= 100 ? 0 : 2 })} ${premium.fiat}`
+                        : premium.fiat}
+                    </span>
+                    <DriverBadge iso2={premium.iso2} />
+                  </div>
                 </div>
 
                 {/* USDT premium badge or No data */}
