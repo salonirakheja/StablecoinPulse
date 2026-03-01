@@ -33,6 +33,20 @@ export interface VolumeFeatureProperties {
   top_exchange: string;
 }
 
+export interface ChainSupply {
+  usdt: number;
+  usdc: number;
+}
+
+export interface ChainBreakdown {
+  tron: ChainSupply;
+  ethereum: ChainSupply;
+  solana: ChainSupply;
+  bsc: ChainSupply;
+  arbitrum: ChainSupply;
+  base: ChainSupply;
+}
+
 export interface StablecoinStats {
   usdtMarketCap: number;
   usdcMarketCap: number;
@@ -41,6 +55,7 @@ export interface StablecoinStats {
   usdtDominance: string;
   usdcDominance: string;
   daiDominance: string;
+  chainBreakdown: ChainBreakdown | null;
 }
 
 export interface VolumeApiResponse {

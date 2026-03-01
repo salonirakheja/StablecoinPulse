@@ -229,6 +229,7 @@ function HomeContent() {
             filter={filter}
             onFilterChange={setFilter}
             viewMode={viewMode}
+            chainBreakdown={data.stablecoinStats?.chainBreakdown ?? null}
           />
 
           {viewMode === 'volume' ? (
@@ -251,6 +252,7 @@ function HomeContent() {
             globalVolume={data.globalVolume}
             viewMode={viewMode}
           />
+
         </>
       )}
 

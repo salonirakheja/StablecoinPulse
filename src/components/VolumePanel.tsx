@@ -41,6 +41,7 @@ function getFlag(iso2: string): string {
   return FLAG_EMOJI[iso2] || '\u{1F30D}';
 }
 
+
 export default function VolumePanel({ topCountries, globalVolume, lastUpdated, isOpen, onToggle, stablecoinStats }: VolumePanelProps) {
   const timeSince = getTimeSince(lastUpdated);
   const touchStartY = useRef(0);

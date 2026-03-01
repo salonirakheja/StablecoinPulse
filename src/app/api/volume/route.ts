@@ -58,6 +58,7 @@ export async function GET(request: Request) {
         usdtDominance: (liveStablecoins.usdtShare * 100).toFixed(1),
         usdcDominance: (liveStablecoins.usdcShare * 100).toFixed(1),
         daiDominance: (liveStablecoins.daiShare * 100).toFixed(1),
+        chainBreakdown: liveStablecoins.chainBreakdown,
       } : null,
     };
 
