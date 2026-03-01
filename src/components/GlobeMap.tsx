@@ -661,9 +661,22 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
       });
     }
 
-    initMap();
+    // Defer map init so the browser can finish rendering the UI first.
+    // requestIdleCallback lets the main thread breathe; setTimeout fallback for Safari.
+    let idleHandle: number;
+    let timeoutHandle: ReturnType<typeof setTimeout>;
+
+    if (typeof window.requestIdleCallback === 'function') {
+      idleHandle = window.requestIdleCallback(() => initMap(), { timeout: 2000 });
+    } else {
+      timeoutHandle = setTimeout(() => initMap(), 1);
+    }
 
     return () => {
+      if (idleHandle && typeof window.cancelIdleCallback === 'function') {
+        window.cancelIdleCallback(idleHandle);
+      }
+      if (timeoutHandle) clearTimeout(timeoutHandle);
       if (animationId) cancelAnimationFrame(animationId);
       if (mapRef.current) {
         mapRef.current.remove();

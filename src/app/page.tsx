@@ -20,6 +20,20 @@ import PanelSkeleton from '@/components/PanelSkeleton';
 // Dynamic import for GlobeMap to avoid SSR issues with mapbox-gl
 const GlobeMap = dynamic(() => import('@/components/GlobeMap'), {
   ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex items-center justify-center bg-[#030308]">
+      <div className="flex flex-col items-center gap-4">
+        <div
+          className="w-16 h-16 rounded-full animate-pulse"
+          style={{
+            background: 'radial-gradient(circle, rgba(0,245,255,0.3) 0%, transparent 70%)',
+            boxShadow: '0 0 30px rgba(0,245,255,0.2)',
+          }}
+        />
+        <p className="text-xs tracking-widest text-[#7070AA] font-mono">LOADING GLOBE...</p>
+      </div>
+    </div>
+  ),
 });
 
 type ActiveView = 'globe' | 'blog' | 'about';
@@ -156,7 +170,8 @@ function HomeContent() {
     window.history.pushState({ view: 'globe', mode }, '', url);
   }, [activeView]);
 
-  const isLoading = !data || !mapLoaded;
+  // Premium view doesn't need the globe, so don't gate on mapLoaded
+  const isLoading = !data || (viewMode !== 'premium' && !mapLoaded);
 
   const subtitleText = activeView === 'blog'
     ? 'BLOG'
@@ -180,22 +195,29 @@ function HomeContent() {
       <LoadingScreen isLoading={!data} />
       <BackgroundGrid />
 
-      {/* Globe container — stays mounted, hidden when blog/about active.
-          On mobile in premium mode, hide globe (card covers screen, no starfield benefit). */}
-      <div
-        id="globe-container"
-        className={`absolute inset-0 z-10 ${activeView === 'globe' && viewMode === 'premium' ? 'max-md:hidden' : ''}`}
-        style={{ display: activeView === 'globe' ? undefined : 'none' }}
-      >
-        {data && (
-          <GlobeMap
-            initialData={data}
-            filter={filter}
-            viewMode={viewMode}
-            onMapLoaded={() => setMapLoaded(true)}
-          />
-        )}
-      </div>
+      {/* CSS starfield for premium view — lightweight replacement for the globe background */}
+      {activeView === 'globe' && viewMode === 'premium' && (
+        <div className="absolute inset-0 z-10 premium-starfield" />
+      )}
+
+      {/* Globe container — only mount when NOT premium (saves 1.6MB download + 3.7s main thread).
+          Hidden when blog/about active. */}
+      {viewMode !== 'premium' && (
+        <div
+          id="globe-container"
+          className="absolute inset-0 z-10"
+          style={{ display: activeView === 'globe' ? undefined : 'none' }}
+        >
+          {data && (
+            <GlobeMap
+              initialData={data}
+              filter={filter}
+              viewMode={viewMode}
+              onMapLoaded={() => setMapLoaded(true)}
+            />
+          )}
+        </div>
+      )}
 
       {/* Panel skeleton — show while globe is loading */}
       {activeView === 'globe' && isLoading && <PanelSkeleton />}
