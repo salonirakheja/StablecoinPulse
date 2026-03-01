@@ -137,7 +137,6 @@ export default function GlobeControls({ filter, onFilterChange, viewMode, chainB
                   {sortedChains.map(({ key, label, color }) => {
                     const supply = chainVal(chainBreakdown, key, filter);
                     const isActive = activeChains.has(key);
-                    if (supply === 0 && filter === 'dai') return null;
 
                     return (
                       <button
