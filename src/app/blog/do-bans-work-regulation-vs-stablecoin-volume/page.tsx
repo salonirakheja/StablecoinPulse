@@ -5,7 +5,7 @@ import PageNavHeader from '@/components/PageNavHeader';
 export const metadata: Metadata = {
   title: 'Do Bans Work? Regulation Status vs Stablecoin Volume Across 81 Countries | Stablecoin Pulse',
   description:
-    'Restricted countries generate 2x more stablecoin volume per country than regulated ones. We cross-referenced regulation status against estimated volumes for 81 countries.',
+    'Restricted countries generate 2.2x more stablecoin volume per country than regulated ones. We cross-referenced regulation status against estimated volumes for 81 countries.',
   openGraph: {
     title: 'Do Bans Work? Regulation Status vs Stablecoin Volume Across 81 Countries',
     description:
@@ -37,10 +37,10 @@ type CountryData = {
 const restrictedCountries: CountryData[] = [
   { name: 'China', iso2: 'CN', rank: 2, volumeShare: '7.9%', note: 'All crypto transactions banned since 2021. Yet Chinese-origin exchanges (OKX, Gate.io, HTX, MEXC) still attribute massive user bases to China. VPN usage and OTC desks keep it the #2 market globally, generating more volume than Germany, France, and Australia combined.' },
   { name: 'Vietnam', iso2: 'VN', rank: 7, volumeShare: '3.6%', note: 'The State Bank restricts banking services for crypto, yet Vietnam has a stablecoin bias of 0.95, meaning 95% of all crypto activity is stablecoin-related. Ranks above Singapore, which has one of the world\'s most comprehensive regulatory frameworks.' },
-  { name: 'Russia', iso2: 'RU', rank: 6, volumeShare: '3.6%', note: 'Domestic crypto payments banned, yet Russia generates 2.4x the volume of Japan, a fully regulated G7 economy. Sanctions and capital flight have only deepened stablecoin demand.' },
+  { name: 'Russia', iso2: 'RU', rank: 6, volumeShare: '3.6%', note: 'Domestic crypto payments banned, yet Russia generates over 2x the volume of Japan, a fully regulated G7 economy. Sanctions and capital flight have only deepened stablecoin demand.' },
   { name: 'Nigeria', iso2: 'NG', rank: 10, volumeShare: '3.0%', note: 'The CBN restricted banking integration with crypto, yet Nigeria has the deepest P2P market in Africa with a stablecoin bias of 0.94. Generates more volume than Spain, Netherlands, and Switzerland combined. The SEC is now licensing VASPs, effectively conceding the ban failed.' },
-  { name: 'Egypt', iso2: 'EG', rank: 17, volumeShare: '1.2%', note: 'Crypto trading restricted by the Central Bank. Currency devaluation has pushed users to stablecoins as a store of value despite the regulatory stance.' },
-  { name: 'Bangladesh', iso2: 'BD', rank: 27, volumeShare: '0.6%', note: 'The central bank penalizes crypto holders, yet Bangladesh still generates more stablecoin volume than Switzerland, a country that pioneered DLT regulation.' },
+  { name: 'Egypt', iso2: 'EG', rank: 30, volumeShare: '1.1%', note: 'Crypto trading restricted by the Central Bank. Currency devaluation has pushed users to stablecoins as a store of value despite the regulatory stance.' },
+  { name: 'Bangladesh', iso2: 'BD', rank: 36, volumeShare: '0.5%', note: 'The central bank penalizes crypto holders, yet Bangladesh still generates more stablecoin volume than Switzerland, a country that pioneered DLT regulation.' },
 ];
 
 const partialCountries: CountryData[] = [
@@ -63,7 +63,7 @@ const regulatedCountries: CountryData[] = [
 
 const unclearCountries: CountryData[] = [
   { name: 'Ukraine', iso2: 'UA', rank: 15, volumeShare: '2.3%', note: 'Crypto-friendly in practice but no finalized regulatory framework. Stablecoin bias of 0.96, the highest globally, reflects wartime demand for dollar-denominated savings.' },
-  { name: 'Pakistan', iso2: 'PK', rank: 16, volumeShare: '1.5%', note: 'No legal crypto framework exists. Despite regulatory ambiguity, Pakistan outranks Japan (#23) and Hong Kong (#22) in stablecoin volume, both fully regulated markets.' },
+  { name: 'Pakistan', iso2: 'PK', rank: 24, volumeShare: '1.5%', note: 'No legal crypto framework exists. Despite regulatory ambiguity, Pakistan still generates meaningful stablecoin volume, driven by remittance demand and limited banking access.' },
 ];
 
 export default function BansPostPage() {

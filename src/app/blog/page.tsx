@@ -20,7 +20,7 @@ const posts = [
     title: 'Do Bans Work? Regulation Status vs Stablecoin Volume Across 81 Countries',
     date: '2026-03-02',
     description:
-      'Restricted countries generate 2x more stablecoin volume per country than regulated ones. We cross-referenced regulation status against estimated volumes for 81 countries.',
+      'Restricted countries generate 2.2x more stablecoin volume per country than regulated ones. We cross-referenced regulation status against estimated volumes for 81 countries.',
     readingTime: '10 min read',
   },
   {
