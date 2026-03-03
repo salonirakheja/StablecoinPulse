@@ -16,6 +16,22 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: 'do-bans-work-regulation-vs-stablecoin-volume',
+    title: 'Do Bans Work? Regulation Status vs Stablecoin Volume Across 81 Countries',
+    date: '2026-03-02',
+    description:
+      'Restricted countries generate 2x more stablecoin volume per country than regulated ones. We cross-referenced regulation status against estimated volumes for 81 countries.',
+    readingTime: '10 min read',
+  },
+  {
+    slug: 'stablecoin-premiums-emerging-markets',
+    title: 'The Real Price of $1: Stablecoin Premiums Across Emerging Markets',
+    date: '2026-02-26',
+    description:
+      'In Turkey, $1 of USDC costs $1.18. In India, $1.13. We tracked USDT and USDC premiums across 16 emerging markets to measure the real cost of accessing dollar-pegged stablecoins.',
+    readingTime: '8 min read',
+  },
+  {
     slug: 'stablecoin-regulations-by-country-2025',
     title: 'Stablecoin Regulations by Country (2025)',
     date: '2025-02-20',
