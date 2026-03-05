@@ -78,13 +78,28 @@ function formatPremium(pct: number | null): string {
 }
 
 // --- Sort logic ---
-type SortKey = 'country' | 'usdt' | 'usdc';
+type SortKey = 'country' | 'usdt' | 'usdc' | 'fx12m';
 type SortDir = 'asc' | 'desc';
 
 function getSortValue(p: CountryPremium, key: SortKey): number | string {
   if (key === 'country') return p.country;
   if (key === 'usdt') return p.usdtPremiumPct ?? -Infinity;
+  if (key === 'fx12m') return p.depreciation12m ?? -Infinity;
   return p.usdcPremiumPct ?? -Infinity;
+}
+
+function getDepreciationColor(pct: number | null): string {
+  if (pct === null) return '#7070AA';
+  if (pct >= 30) return '#FF1493';
+  if (pct >= 10) return '#FF6B6B';
+  if (pct > 0) return '#FFB800';
+  return '#00E5A0';
+}
+
+function formatDepreciation(pct: number | null): string {
+  if (pct === null) return '';
+  const arrow = pct > 0 ? '↓' : pct < 0 ? '↑' : '';
+  return `${arrow} ${Math.abs(pct).toFixed(1)}%`;
 }
 
 function SortArrow({ active, dir }: { active: boolean; dir: SortDir }) {
@@ -395,7 +410,17 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
     );
     const highDemand = highDemandCountries.length;
     const highDemandNames = highDemandCountries.map(p => p.country);
-    return { avgUsdt, highestCountry, highestPct, highestAsset, highDemand, highDemandNames };
+    // Worst currency depreciation
+    let worstDepCountry: string | null = null;
+    let worstDepPct: number | null = null;
+    let worstDepFiat: string | null = null;
+    for (const p of data.premiums) {
+      if (p.depreciation12m !== null && (worstDepPct === null || p.depreciation12m > worstDepPct)) {
+        worstDepPct = p.depreciation12m; worstDepCountry = p.country; worstDepFiat = p.fiat;
+      }
+    }
+    const hasDepreciation = data.premiums.some(p => p.depreciation12m !== null);
+    return { avgUsdt, highestCountry, highestPct, highestAsset, highDemand, highDemandNames, worstDepCountry, worstDepPct, worstDepFiat, hasDepreciation };
   }, [data]);
 
   const headerBtnClass = "flex items-center justify-center gap-0.5 text-[10px] font-mono tracking-wider uppercase cursor-pointer transition-colors hover:text-[#00F5FF] border-none bg-transparent outline-none p-0";
@@ -569,7 +594,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
 
           {/* Summary stats bar — inline on mobile, grid on desktop */}
           {stats && (
-            <div className="flex md:grid md:grid-cols-3 gap-2 md:gap-3 px-4 py-2 md:px-6 md:py-3
+            <div className="flex md:grid md:grid-cols-[0.8fr_1.1fr_1fr_1.1fr] gap-2 md:gap-3 px-4 py-2 md:px-6 md:py-3
               border-b border-[rgba(0,245,255,0.08)] overflow-x-auto max-md:scrollbar-none"
               style={{ WebkitOverflowScrolling: 'touch' }}>
               <div className="rounded-lg px-3 py-1.5 md:py-2 border border-[rgba(0,245,255,0.1)] max-md:flex-shrink-0 max-md:min-w-[120px]"
@@ -593,9 +618,20 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                   <div className="text-[7px] md:text-[8px] font-mono text-[#7070AA] mt-0.5">{stats.highestAsset}</div>
                 )}
               </div>
-              <div className="max-md:flex-shrink-0 max-md:min-w-[110px]">
+              <div className="max-md:flex-shrink-0 max-md:min-w-[110px] [&>div]:h-full">
                 <HighDemandCard count={stats.highDemand} names={stats.highDemandNames} />
               </div>
+              {stats.worstDepCountry && stats.worstDepPct !== null && (
+                <div className="rounded-lg px-3 py-1.5 md:py-2 border border-[rgba(0,245,255,0.1)] max-md:flex-shrink-0 max-md:min-w-[140px]"
+                  style={{ background: 'rgba(0,245,255,0.04)' }}>
+                  <div className="text-[8px] md:text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-0.5">Worst FX (12M)</div>
+                  <div className="text-xs md:text-sm font-mono font-bold"
+                    style={{ color: getDepreciationColor(stats.worstDepPct) }}>
+                    {stats.worstDepCountry} ↓{stats.worstDepPct.toFixed(1)}%
+                  </div>
+                  <div className="text-[7px] md:text-[8px] font-mono text-[#7070AA] mt-0.5">{stats.worstDepFiat} vs USD</div>
+                </div>
+              )}
             </div>
           )}
 
@@ -622,6 +658,17 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
               USDC
               <SortArrow active={sortKey === 'usdc'} dir={sortDir} />
             </button>
+            {stats?.hasDepreciation && (
+              <button
+                onClick={() => handleSort('fx12m')}
+                className={`w-16 md:w-20 ${headerBtnClass} ${sortKey === 'fx12m' ? 'text-[#00F5FF]' : 'text-[#7070AA]'}`}
+              >
+
+                <span className="hidden md:inline">FX/USD 12M</span>
+                <span className="md:hidden">FX 12M</span>
+                <SortArrow active={sortKey === 'fx12m'} dir={sortDir} />
+              </button>
+            )}
           </div>
 
           {/* Country list */}
@@ -703,6 +750,20 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                   </div>
                 ) : (
                   <div className="flex-shrink-0 w-16 md:w-20" style={{ border: 'none', background: 'transparent' }}><NoDataBadge /></div>
+                )}
+
+                {/* FX 12M depreciation */}
+                {stats?.hasDepreciation && (
+                  <div
+                    className="flex-shrink-0 w-16 md:w-20 py-1 md:py-1.5 rounded text-[11px] md:text-xs font-mono tracking-wider text-center"
+                    style={{
+                      color: getDepreciationColor(premium.depreciation12m),
+                      backgroundColor: premium.depreciation12m !== null ? `${getDepreciationColor(premium.depreciation12m)}12` : 'transparent',
+                      border: premium.depreciation12m !== null ? `1px solid ${getDepreciationColor(premium.depreciation12m)}25` : '1px solid #444',
+                    }}
+                  >
+                    {premium.depreciation12m !== null ? formatDepreciation(premium.depreciation12m) : '—'}
+                  </div>
                 )}
               </motion.div>
             );

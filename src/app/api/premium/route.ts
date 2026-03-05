@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server';
 import { PREMIUM_COUNTRIES } from '@/data/premium-countries';
 import { fetchFXRates } from '@/lib/exchange-rates';
 import { fetchAllP2PPrices } from '@/lib/binance-p2p';
+import { fetchHistoricalFXRates, getDateOneYearAgo } from '@/lib/historical-fx';
 import { redis } from '@/lib/redis';
 
 export const dynamic = 'force-dynamic';
@@ -18,6 +19,7 @@ export interface CountryPremium {
   usdcPremiumPct: number | null;
   usdtAdCount: number;
   usdcAdCount: number;
+  depreciation12m: number | null;
 }
 
 export interface PremiumApiResponse {
@@ -42,10 +44,12 @@ export async function GET() {
       }
     }
 
-    // Fetch FX rates and P2P prices in parallel
-    const [fxData, p2pPrices] = await Promise.all([
+    // Fetch FX rates, P2P prices, and historical rates in parallel
+    const oneYearAgo = getDateOneYearAgo();
+    const [fxData, p2pPrices, historicalFX] = await Promise.all([
       fetchFXRates(),
       fetchAllP2PPrices(PREMIUM_COUNTRIES),
+      fetchHistoricalFXRates(oneYearAgo),
     ]);
 
     // Compute premium for each country
@@ -63,6 +67,13 @@ export async function GET() {
         ? parseFloat((((usdcP2P / officialRate) - 1) * 100).toFixed(2))
         : null;
 
+      // Depreciation: ((current - historical) / historical) * 100
+      // Positive = currency lost value vs USD (depreciation)
+      const historicalRate = historicalFX?.rates[country.fiat.toLowerCase()] ?? null;
+      const depreciation12m = historicalRate && officialRate
+        ? parseFloat((((officialRate - historicalRate) / historicalRate) * 100).toFixed(1))
+        : null;
+
       return {
         country: country.name,
         iso2: country.iso2,
@@ -75,6 +86,7 @@ export async function GET() {
         usdcPremiumPct,
         usdtAdCount: p2p?.usdt?.adCount ?? 0,
         usdcAdCount: p2p?.usdc?.adCount ?? 0,
+        depreciation12m,
       };
     });
 
