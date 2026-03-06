@@ -3,6 +3,7 @@
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Link from 'next/link';
 import type { PremiumApiResponse } from '@/app/api/premium/route';
 import type { CountryPremium } from '@/app/api/premium/route';
 import { PREMIUM_DRIVERS } from '@/data/premium-drivers';
@@ -707,7 +708,7 @@ export default function PremiumPanel({ data, loading }: PremiumPanelProps) {
                 {/* Country + fiat */}
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center">
-                    <span className="text-xs md:text-sm text-[#E0E0FF] truncate">{premium.country}</span>
+                    <Link href={`/country/${premium.iso2}`} className="text-xs md:text-sm text-[#E0E0FF] truncate hover:text-[#00F5FF] transition-colors">{premium.country}</Link>
                     {hasNotableSpread && <span className="hidden md:inline-flex"><SpreadBadge /></span>}
                   </div>
                   <div className="flex items-center gap-1.5">

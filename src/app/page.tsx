@@ -192,7 +192,7 @@ function HomeContent() {
 
   return (
     <main className="relative w-screen h-screen overflow-hidden">
-      <LoadingScreen isLoading={!data} />
+      <LoadingScreen isLoading={!data && viewMode !== 'premium'} />
       <BackgroundGrid />
 
       {/* CSS starfield for premium view — lightweight replacement for the globe background */}
