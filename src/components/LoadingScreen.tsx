@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 interface LoadingScreenProps {
@@ -7,6 +8,12 @@ interface LoadingScreenProps {
 }
 
 export default function LoadingScreen({ isLoading }: LoadingScreenProps) {
+  // Hide the server-rendered HTML loader once React has hydrated
+  useEffect(() => {
+    const el = document.getElementById('html-loader');
+    if (el) el.style.display = 'none';
+  }, []);
+
   return (
     <AnimatePresence>
       {isLoading && (
