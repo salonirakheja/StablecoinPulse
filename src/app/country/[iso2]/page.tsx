@@ -5,8 +5,16 @@ import { STABLECOIN_REGULATIONS, REGULATION_COLORS, REGULATION_LABELS } from '@/
 import { PREMIUM_COUNTRIES } from '@/data/premium-countries';
 import { PREMIUM_DRIVERS } from '@/data/premium-drivers';
 import { CHAIN_DISTRIBUTIONS } from '@/data/chain-country-distribution';
-import type { PremiumApiResponse, CountryPremium } from '@/app/api/premium/route';
-import type { VolumeApiResponse, CountryVolume } from '@/lib/types';
+import { REGULATORY_TIMELINES } from '@/data/regulatory-timelines';
+import { PREMIUM_COUNTRIES as ALL_PREMIUM_COUNTRIES } from '@/data/premium-countries';
+import { fetchFXRates } from '@/lib/exchange-rates';
+import { fetchAllP2PPrices } from '@/lib/binance-p2p';
+import { fetchHistoricalFXRates, getDateOneYearAgo } from '@/lib/historical-fx';
+import { fetchExchanges, fetchBtcPrice, fetchStablecoinVolumes } from '@/lib/coingecko';
+import { fetchLiveStablecoinData } from '@/lib/defillama';
+import { aggregateByCountry } from '@/lib/aggregator';
+import { calibrateWithLiveData } from '@/data/stablecoin-weights';
+import type { CountryVolume } from '@/lib/types';
 import BackgroundGrid from '@/components/BackgroundGrid';
 
 export const revalidate = 900;
@@ -107,46 +115,91 @@ function getDepreciationColor(pct: number | null): string {
   return '#00E5A0';
 }
 
+interface CountryPremiumData {
+  usdtPremiumPct: number | null;
+  usdcPremiumPct: number | null;
+  usdtP2PPrice: number | null;
+  usdcP2PPrice: number | null;
+  officialRate: number;
+  fiat: string;
+  depreciation12m: number | null;
+}
+
 async function fetchCountryData(iso2: string) {
-  const baseUrl = process.env.NEXT_PUBLIC_URL || 'http://localhost:3000';
-
-  const [premiumRes, volumeRes] = await Promise.all([
-    fetch(`${baseUrl}/api/premium`, { next: { revalidate: 900 } }).catch(() => null),
-    fetch(`${baseUrl}/api/volume`, { next: { revalidate: 900 } }).catch(() => null),
-  ]);
-
-  let premiumData: CountryPremium | null = null;
+  let premiumData: CountryPremiumData | null = null;
   let volumeData: CountryVolume | null = null;
 
-  if (premiumRes?.ok) {
-    const data: PremiumApiResponse = await premiumRes.json();
-    premiumData = data.premiums.find((p) => p.iso2 === iso2) || null;
+  // Fetch premium data directly
+  const premiumCountry = ALL_PREMIUM_COUNTRIES.find((c) => c.iso2 === iso2);
+  if (premiumCountry) {
+    try {
+      const oneYearAgo = getDateOneYearAgo();
+      const [fxData, p2pPrices, historicalFX] = await Promise.all([
+        fetchFXRates(),
+        fetchAllP2PPrices([premiumCountry]),
+        fetchHistoricalFXRates(oneYearAgo),
+      ]);
+
+      const officialRate = fxData.rates[premiumCountry.fiat] || 0;
+      const p2p = p2pPrices.get(iso2);
+      const usdtP2P = p2p?.usdt?.price ?? null;
+      const usdcP2P = p2p?.usdc?.price ?? null;
+      const usdtPremiumPct = usdtP2P && officialRate
+        ? parseFloat((((usdtP2P / officialRate) - 1) * 100).toFixed(2))
+        : null;
+      const usdcPremiumPct = usdcP2P && officialRate
+        ? parseFloat((((usdcP2P / officialRate) - 1) * 100).toFixed(2))
+        : null;
+      const historicalRate = historicalFX?.rates[premiumCountry.fiat.toLowerCase()] ?? null;
+      const depreciation12m = historicalRate && officialRate
+        ? parseFloat((((officialRate - historicalRate) / historicalRate) * 100).toFixed(1))
+        : null;
+
+      premiumData = {
+        usdtPremiumPct, usdcPremiumPct,
+        usdtP2PPrice: usdtP2P, usdcP2PPrice: usdcP2P,
+        officialRate, fiat: premiumCountry.fiat, depreciation12m,
+      };
+    } catch (e) {
+      console.warn('Premium data fetch failed for country page:', e);
+    }
   }
 
-  if (volumeRes?.ok) {
-    const data: VolumeApiResponse = await volumeRes.json();
-    // Check topCountries first, then fall back to geojson features
-    volumeData = data.topCountries.find((c) => c.iso2 === iso2) || null;
-    if (!volumeData && data.geojson?.features) {
-      const feature = data.geojson.features.find(
+  // Fetch volume data directly
+  try {
+    const [exchanges, btcPrice, liveStablecoins, stablecoinVolumes] = await Promise.all([
+      fetchExchanges(),
+      fetchBtcPrice(),
+      fetchLiveStablecoinData().catch(() => null),
+      fetchStablecoinVolumes().catch(() => null),
+    ]);
+    if (liveStablecoins) {
+      calibrateWithLiveData({
+        usdtShare: liveStablecoins.usdtShare,
+        usdcShare: liveStablecoins.usdcShare,
+        daiShare: liveStablecoins.daiShare,
+      });
+    }
+    const result = aggregateByCountry(exchanges, btcPrice, 'all', liveStablecoins, stablecoinVolumes);
+    // Find in topCountries or geojson
+    volumeData = result.topCountries.find((c) => c.iso2 === iso2) || null;
+    if (!volumeData && result.geojson?.features) {
+      const feature = result.geojson.features.find(
         (f) => f.properties && (f.properties as Record<string, unknown>).iso2 === iso2
       );
       if (feature?.properties) {
         const p = feature.properties as Record<string, unknown>;
         volumeData = {
-          country: p.country as string,
-          iso2: iso2,
-          iso3: '',
-          lat: 0,
-          lng: 0,
-          volumeUsd: p.volume_usd as number,
-          volumeBtc: 0,
+          country: p.country as string, iso2, iso3: '', lat: 0, lng: 0,
+          volumeUsd: p.volume_usd as number, volumeBtc: 0,
           exchangeCount: p.exchange_count as number,
           topExchange: p.top_exchange as string,
           volumeNormalized: p.volume_normalized as number,
         };
       }
     }
+  } catch (e) {
+    console.warn('Volume data fetch failed for country page:', e);
   }
 
   return { premiumData, volumeData };
@@ -160,6 +213,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
   const regulation = STABLECOIN_REGULATIONS.find((r) => r.iso2 === code);
   const premiumCountry = PREMIUM_COUNTRIES.find((c) => c.iso2 === code);
   const driver = PREMIUM_DRIVERS[code];
+  const timeline = REGULATORY_TIMELINES[code] || [];
 
   // Must exist in at least one data source
   const countryName = regulation?.country || premiumCountry?.name;
@@ -334,6 +388,44 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             {regulation.notes && (
               <p className="text-[11px] font-mono text-[#7070AA] mt-3 leading-relaxed">{regulation.notes}</p>
             )}
+          </section>
+        )}
+
+        {/* Regulatory timeline */}
+        {timeline.length > 0 && (
+          <section
+            className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+            style={{ background: 'rgba(5, 5, 25, 0.8)' }}
+          >
+            <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-4">
+              Regulatory Timeline
+            </h2>
+            <div className="relative pl-4 border-l border-[rgba(0,245,255,0.15)]">
+              {timeline.map((evt, i) => {
+                const isFuture = evt.date > '2026-03';
+                return (
+                  <div key={i} className="relative mb-4 last:mb-0">
+                    {/* Dot on the line */}
+                    <div
+                      className="absolute -left-[21px] top-1 w-2.5 h-2.5 rounded-full border-2"
+                      style={{
+                        borderColor: isFuture ? '#7070AA' : '#00F5FF',
+                        backgroundColor: isFuture ? 'transparent' : '#00F5FF',
+                        boxShadow: isFuture ? 'none' : '0 0 6px rgba(0,245,255,0.5)',
+                      }}
+                    />
+                    <div className="text-[10px] font-mono tracking-wider text-[#7070AA] mb-0.5">
+                      {evt.date.length === 7
+                        ? new Date(evt.date + '-01').toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
+                        : evt.date}
+                    </div>
+                    <p className={`text-sm leading-relaxed ${isFuture ? 'text-[#7070AA]' : 'text-[#C0C0E0]'}`}>
+                      {evt.event}
+                    </p>
+                  </div>
+                );
+              })}
+            </div>
           </section>
         )}
 
