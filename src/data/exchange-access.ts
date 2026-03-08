@@ -147,39 +147,26 @@ export const LOCAL_EXCHANGES: Record<string, ExchangeInfo[]> = {
   ],
   BR: [
     { id: 'mercado_bitcoin', name: 'Mercado Bitcoin', url: 'https://www.mercadobitcoin.com.br', paymentMethods: ['Bank Transfer', 'PIX'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
-    { id: 'foxbit', name: 'Foxbit', url: 'https://foxbit.com.br', paymentMethods: ['Bank Transfer', 'PIX'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+    { id: 'foxbit', name: 'Foxbit', url: 'https://foxbit.com.br', paymentMethods: ['Bank Transfer', 'PIX'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
   IN: [
-    { id: 'wazirx', name: 'WazirX', url: 'https://wazirx.com', paymentMethods: ['Bank Transfer', 'UPI'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
     { id: 'coindcx', name: 'CoinDCX', url: 'https://coindcx.com', paymentMethods: ['Bank Transfer', 'UPI'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
   AR: [
     { id: 'ripio', name: 'Ripio', url: 'https://www.ripio.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC', 'DAI'], hasP2P: false, type: 'local' },
     { id: 'lemon', name: 'Lemon Cash', url: 'https://www.lemon.me', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC', 'DAI'], hasP2P: false, type: 'local' },
   ],
-  KE: [
-    { id: 'yellowcard', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['Bank Transfer', 'Mobile Money'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
-  ],
-  PK: [
-    { id: 'rainpk', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
-  ],
-  EG: [
-    { id: 'yellowcard_eg', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
-  ],
-  US: [
-    { id: 'coinbase_us', name: 'Coinbase', url: 'https://www.coinbase.com', paymentMethods: ['Bank Transfer', 'Card', 'ACH'], stablecoins: ['USDC', 'USDT', 'DAI'], hasP2P: false, type: 'local' },
-    { id: 'kraken_us', name: 'Kraken', url: 'https://www.kraken.com', paymentMethods: ['Bank Transfer', 'ACH', 'Wire'], stablecoins: ['USDT', 'USDC', 'DAI'], hasP2P: false, type: 'local' },
-  ],
+  KE: [],
+  PK: [],
+  EG: [],
+  US: [],
   MX: [
     { id: 'bitso', name: 'Bitso', url: 'https://bitso.com', paymentMethods: ['Bank Transfer', 'SPEI'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
   KR: [
-    { id: 'upbit', name: 'Upbit', url: 'https://upbit.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
-    { id: 'bithumb', name: 'Bithumb', url: 'https://www.bithumb.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+    { id: 'upbit', name: 'Upbit', url: 'https://upbit.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
-  JP: [
-    { id: 'bitflyer', name: 'bitFlyer', url: 'https://bitflyer.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
-  ],
+  JP: [],
   AU: [
     { id: 'coinspot', name: 'CoinSpot', url: 'https://www.coinspot.com.au', paymentMethods: ['Bank Transfer', 'Card', 'PayID'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
@@ -191,17 +178,14 @@ export const LOCAL_EXCHANGES: Record<string, ExchangeInfo[]> = {
     { id: 'coins_ph', name: 'Coins.ph', url: 'https://coins.ph', paymentMethods: ['Bank Transfer', 'GCash', 'Mobile Money'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
   TH: [
-    { id: 'bitkub', name: 'Bitkub', url: 'https://www.bitkub.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+    { id: 'bitkub', name: 'Bitkub', url: 'https://www.bitkub.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
-  GH: [
-    { id: 'yellowcard_gh', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['Bank Transfer', 'Mobile Money'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
-  ],
+  GH: [],
 };
 
 // Given a country name, find which global exchanges serve it
 // (from redistribution data — if an exchange has a distribution entry for a country, it serves users there)
 import { GLOBAL_EXCHANGE_REDISTRIBUTION } from './global-exchange-redistribution';
-import { STABLECOIN_REGULATIONS } from './stablecoin-regulations';
 
 export function getExchangesForCountry(countryName: string, iso2: string): ExchangeInfo[] {
   const results: ExchangeInfo[] = [];
