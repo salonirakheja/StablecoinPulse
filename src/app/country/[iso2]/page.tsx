@@ -6,6 +6,7 @@ import { PREMIUM_COUNTRIES } from '@/data/premium-countries';
 import { PREMIUM_DRIVERS } from '@/data/premium-drivers';
 import { CHAIN_DISTRIBUTIONS } from '@/data/chain-country-distribution';
 import { REGULATORY_TIMELINES } from '@/data/regulatory-timelines';
+import { getExchangesForCountry } from '@/data/exchange-access';
 import { PREMIUM_COUNTRIES as ALL_PREMIUM_COUNTRIES } from '@/data/premium-countries';
 import { fetchFXRates } from '@/lib/exchange-rates';
 import { fetchAllP2PPrices } from '@/lib/binance-p2p';
@@ -221,6 +222,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
 
   const { premiumData, volumeData } = await fetchCountryData(code);
   const chainShares = getChainShares(countryName);
+  const exchanges = getExchangesForCountry(countryName, code);
 
   const flagCode = code.toLowerCase();
 
@@ -371,7 +373,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             )}
             {regulation.stablecoinsAllowed && regulation.stablecoinsAllowed.length > 0 && (
               <div className="flex items-center gap-2 text-xs font-mono text-[#7070AA]">
-                <span className="text-[#E0E0FF]">Allowed:</span>
+                <span className="text-[#E0E0FF]">{regulation.status === 'restricted' ? 'Most used:' : 'Allowed:'}</span>
                 <div className="flex gap-1.5">
                   {regulation.stablecoinsAllowed.map((coin) => (
                     <span
@@ -450,6 +452,71 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
               </span>
             </div>
             <p className="text-sm leading-relaxed text-[#C0C0E0]">{driver.explanation}</p>
+          </section>
+        )}
+
+        {/* How to buy stablecoins */}
+        {exchanges.length > 0 && (
+          <section
+            className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+            style={{ background: 'rgba(5, 5, 25, 0.8)' }}
+          >
+            <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-4">
+              How to Buy Stablecoins in {countryName}
+            </h2>
+            <div className="space-y-3">
+              {exchanges.map((ex) => (
+                <a
+                  key={ex.id}
+                  href={ex.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-start gap-3 p-3 rounded-lg border border-[rgba(0,245,255,0.08)] hover:border-[rgba(0,245,255,0.25)] transition-colors group"
+                  style={{ background: 'rgba(0,245,255,0.02)' }}
+                >
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center gap-2 mb-1.5">
+                      <span className="text-sm font-mono font-bold text-[#E0E0FF] group-hover:text-[#00F5FF] transition-colors">
+                        {ex.name}
+                      </span>
+                      {ex.type === 'local' && (
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded border border-[rgba(0,229,160,0.3)] text-[#00E5A0]" style={{ background: 'rgba(0,229,160,0.08)' }}>
+                          LOCAL
+                        </span>
+                      )}
+                      {ex.hasP2P && (
+                        <span className="text-[9px] font-mono px-1.5 py-0.5 rounded border border-[rgba(255,184,0,0.3)] text-[#FFB800]" style={{ background: 'rgba(255,184,0,0.08)' }}>
+                          P2P
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex flex-wrap gap-1.5 mb-1.5">
+                      {ex.stablecoins.map((coin) => (
+                        <span
+                          key={coin}
+                          className="text-[9px] font-mono px-1.5 py-0.5 rounded border border-[rgba(0,245,255,0.15)] text-[#00F5FF]"
+                          style={{ background: 'rgba(0,245,255,0.05)' }}
+                        >
+                          {coin}
+                        </span>
+                      ))}
+                    </div>
+                    <div className="text-[10px] font-mono text-[#7070AA]">
+                      {ex.paymentMethods.join(' · ')}
+                    </div>
+                  </div>
+                  <svg
+                    width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
+                    className="text-[#7070AA] group-hover:text-[#00F5FF] transition-colors mt-1 flex-shrink-0"
+                  >
+                    <path d="M7 17L17 7M17 7H7M17 7v10" />
+                  </svg>
+                </a>
+              ))}
+            </div>
+            <p className="text-[9px] font-mono text-[#7070AA] mt-3">
+              Exchange availability may vary. Always verify directly with the exchange. Not financial advice.
+            </p>
           </section>
         )}
 
