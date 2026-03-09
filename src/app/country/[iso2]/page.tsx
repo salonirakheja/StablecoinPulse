@@ -7,6 +7,7 @@ import { PREMIUM_DRIVERS } from '@/data/premium-drivers';
 import { CHAIN_DISTRIBUTIONS } from '@/data/chain-country-distribution';
 import { REGULATORY_TIMELINES } from '@/data/regulatory-timelines';
 import { getExchangesForCountry } from '@/data/exchange-access';
+import { COUNTRY_CENTROIDS } from '@/data/country-centroids';
 import { PREMIUM_COUNTRIES as ALL_PREMIUM_COUNTRIES } from '@/data/premium-countries';
 import { fetchFXRates } from '@/lib/exchange-rates';
 import { fetchAllP2PPrices } from '@/lib/binance-p2p';
@@ -20,9 +21,9 @@ import BackgroundGrid from '@/components/BackgroundGrid';
 
 export const revalidate = 900;
 
-// Pre-generate pages for premium countries
+// Pre-generate pages for all countries in centroids (covers every country on the globe)
 export function generateStaticParams() {
-  return PREMIUM_COUNTRIES.map((c) => ({ iso2: c.iso2 }));
+  return COUNTRY_CENTROIDS.map((c) => ({ iso2: c.iso2 }));
 }
 
 // Dynamic metadata for SEO
@@ -31,7 +32,8 @@ export async function generateMetadata({ params }: { params: Promise<{ iso2: str
   const code = iso2.toUpperCase();
   const regulation = STABLECOIN_REGULATIONS.find((r) => r.iso2 === code);
   const premium = PREMIUM_COUNTRIES.find((c) => c.iso2 === code);
-  const name = regulation?.country || premium?.name || code;
+  const centroid = COUNTRY_CENTROIDS.find((c) => c.iso2 === code);
+  const name = regulation?.country || premium?.name || centroid?.name || code;
 
   return {
     title: `Stablecoin Data for ${name} — Premium, Volume, Regulation | Stablecoin Pulse`,
@@ -216,8 +218,9 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
   const driver = PREMIUM_DRIVERS[code];
   const timeline = REGULATORY_TIMELINES[code] || [];
 
-  // Must exist in at least one data source
-  const countryName = regulation?.country || premiumCountry?.name;
+  // Must exist in at least one data source (centroids covers all 155 countries on the globe)
+  const centroid = COUNTRY_CENTROIDS.find((c) => c.iso2 === code);
+  const countryName = regulation?.country || premiumCountry?.name || centroid?.name;
   if (!countryName) notFound();
 
   const { premiumData, volumeData } = await fetchCountryData(code);
@@ -231,16 +234,29 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
       <BackgroundGrid />
 
       <div className="relative z-10 max-w-3xl mx-auto px-4 py-6 md:px-8 md:py-10">
-        {/* Back link */}
-        <Link
-          href="/?view=premium"
-          className="inline-flex items-center gap-2 text-[11px] font-mono tracking-wider text-[#7070AA] hover:text-[#00F5FF] transition-colors mb-6"
-        >
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M19 12H5M12 5l-7 7 7 7" />
-          </svg>
-          BACK TO PREMIUM
-        </Link>
+        {/* Navigation links */}
+        <div className="flex items-center gap-4 mb-6">
+          <Link
+            href="/?view=premium"
+            className="inline-flex items-center gap-2 text-[11px] font-mono tracking-wider text-[#7070AA] hover:text-[#00F5FF] transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <path d="M19 12H5M12 5l-7 7 7 7" />
+            </svg>
+            PREMIUM
+          </Link>
+          <span className="text-[#7070AA]/30">|</span>
+          <Link
+            href={`/?fly=${code}`}
+            className="inline-flex items-center gap-2 text-[11px] font-mono tracking-wider text-[#7070AA] hover:text-[#00F5FF] transition-colors"
+          >
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+            </svg>
+            VIEW ON GLOBE
+          </Link>
+        </div>
 
         {/* Country header */}
         <div className="flex items-center gap-4 mb-6">
@@ -280,8 +296,8 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           </div>
         </div>
 
-        {/* Stat cards */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-8">
+        {/* Stat cards — show premium/FX cards only when we have premium data */}
+        <div className={`grid grid-cols-2 ${premiumData ? 'md:grid-cols-4' : 'md:grid-cols-2'} gap-3 mb-8`}>
           {/* Volume */}
           <div
             className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
@@ -298,64 +314,91 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             )}
           </div>
 
-          {/* USDT premium */}
-          <div
-            className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
-            style={{ background: 'rgba(5, 5, 25, 0.8)' }}
-          >
-            <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">USDT Premium</div>
+          {/* Regulation status card (only when no premium data — fills the second slot) */}
+          {!premiumData && regulation && (
             <div
-              className="text-lg font-mono font-bold"
-              style={{ color: getPremiumColor(premiumData?.usdtPremiumPct ?? null) }}
+              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
-              {formatPremium(premiumData?.usdtPremiumPct ?? null)}
-            </div>
-            {premiumData?.usdtP2PPrice && (
-              <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
-                P2P: {premiumData.usdtP2PPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })} {premiumData.fiat}
+              <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">Regulation</div>
+              <div
+                className="text-lg font-mono font-bold"
+                style={{ color: REGULATION_COLORS[regulation.status] }}
+              >
+                {REGULATION_LABELS[regulation.status]}
               </div>
-            )}
-          </div>
+              {regulation.keyLaw && (
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5 truncate">
+                  {regulation.keyLaw}
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* USDC premium */}
-          <div
-            className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
-            style={{ background: 'rgba(5, 5, 25, 0.8)' }}
-          >
-            <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">USDC Premium</div>
+          {/* USDT premium — only when we have data */}
+          {premiumData && (
             <div
-              className="text-lg font-mono font-bold"
-              style={{ color: getPremiumColor(premiumData?.usdcPremiumPct ?? null) }}
+              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
-              {formatPremium(premiumData?.usdcPremiumPct ?? null)}
-            </div>
-            {premiumData?.usdcP2PPrice && (
-              <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
-                P2P: {premiumData.usdcP2PPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })} {premiumData.fiat}
+              <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">USDT Premium</div>
+              <div
+                className="text-lg font-mono font-bold"
+                style={{ color: getPremiumColor(premiumData.usdtPremiumPct) }}
+              >
+                {formatPremium(premiumData.usdtPremiumPct)}
               </div>
-            )}
-          </div>
+              {premiumData.usdtP2PPrice && (
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+                  P2P: {premiumData.usdtP2PPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })} {premiumData.fiat}
+                </div>
+              )}
+            </div>
+          )}
 
-          {/* Currency depreciation */}
-          <div
-            className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
-            style={{ background: 'rgba(5, 5, 25, 0.8)' }}
-          >
-            <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">FX vs USD (12M)</div>
+          {/* USDC premium — only when we have data */}
+          {premiumData && (
             <div
-              className="text-lg font-mono font-bold"
-              style={{ color: getDepreciationColor(premiumData?.depreciation12m ?? null) }}
+              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
-              {premiumData?.depreciation12m !== null && premiumData?.depreciation12m !== undefined
-                ? `${premiumData.depreciation12m > 0 ? '↓' : '↑'} ${Math.abs(premiumData.depreciation12m).toFixed(1)}%`
-                : '—'}
-            </div>
-            {premiumData?.officialRate && premiumCountry && (
-              <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
-                $1 = {premiumData.officialRate.toLocaleString('en-US', { maximumFractionDigits: premiumData.officialRate >= 100 ? 0 : 2 })} {premiumCountry.fiat}
+              <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">USDC Premium</div>
+              <div
+                className="text-lg font-mono font-bold"
+                style={{ color: getPremiumColor(premiumData.usdcPremiumPct) }}
+              >
+                {formatPremium(premiumData.usdcPremiumPct)}
               </div>
-            )}
-          </div>
+              {premiumData.usdcP2PPrice && (
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+                  P2P: {premiumData.usdcP2PPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })} {premiumData.fiat}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Currency depreciation — only when we have data */}
+          {premiumData && (
+            <div
+              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              style={{ background: 'rgba(5, 5, 25, 0.8)' }}
+            >
+              <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">FX vs USD (12M)</div>
+              <div
+                className="text-lg font-mono font-bold"
+                style={{ color: getDepreciationColor(premiumData.depreciation12m) }}
+              >
+                {premiumData.depreciation12m !== null && premiumData.depreciation12m !== undefined
+                  ? `${premiumData.depreciation12m > 0 ? '↓' : '↑'} ${Math.abs(premiumData.depreciation12m).toFixed(1)}%`
+                  : '—'}
+              </div>
+              {premiumData.officialRate && premiumCountry && (
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+                  $1 = {premiumData.officialRate.toLocaleString('en-US', { maximumFractionDigits: premiumData.officialRate >= 100 ? 0 : 2 })} {premiumCountry.fiat}
+                </div>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Regulation section */}

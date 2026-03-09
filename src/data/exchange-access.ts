@@ -156,17 +156,24 @@ export const LOCAL_EXCHANGES: Record<string, ExchangeInfo[]> = {
     { id: 'ripio', name: 'Ripio', url: 'https://www.ripio.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC', 'DAI'], hasP2P: false, type: 'local' },
     { id: 'lemon', name: 'Lemon Cash', url: 'https://www.lemon.me', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC', 'DAI'], hasP2P: false, type: 'local' },
   ],
-  KE: [],
+  KE: [
+    { id: 'yellow_card_ke', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['M-Pesa', 'Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
   PK: [],
   EG: [],
-  US: [],
+  US: [
+    { id: 'gemini', name: 'Gemini', url: 'https://www.gemini.com', paymentMethods: ['ACH', 'Wire Transfer', 'Card'], stablecoins: ['USDT', 'USDC', 'DAI'], hasP2P: false, type: 'local' },
+  ],
   MX: [
     { id: 'bitso', name: 'Bitso', url: 'https://bitso.com', paymentMethods: ['Bank Transfer', 'SPEI'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
   KR: [
     { id: 'upbit', name: 'Upbit', url: 'https://upbit.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
-  JP: [],
+  JP: [
+    { id: 'bitflyer', name: 'bitFlyer', url: 'https://bitflyer.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+    { id: 'sbi_vc_trade', name: 'SBI VC Trade', url: 'https://www.sbivc.co.jp', paymentMethods: ['Bank Transfer'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
   AU: [
     { id: 'coinspot', name: 'CoinSpot', url: 'https://www.coinspot.com.au', paymentMethods: ['Bank Transfer', 'Card', 'PayID'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
@@ -176,11 +183,137 @@ export const LOCAL_EXCHANGES: Record<string, ExchangeInfo[]> = {
   ],
   PH: [
     { id: 'coins_ph', name: 'Coins.ph', url: 'https://coins.ph', paymentMethods: ['Bank Transfer', 'GCash', 'Mobile Money'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+    { id: 'pdax', name: 'PDAX', url: 'https://pdax.ph', paymentMethods: ['Bank Transfer', 'GCash', 'GrabPay'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
   TH: [
     { id: 'bitkub', name: 'Bitkub', url: 'https://www.bitkub.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
   ],
-  GH: [],
+  GH: [
+    { id: 'yellow_card_gh', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['Mobile Money', 'Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  SG: [
+    { id: 'coinhako', name: 'Coinhako', url: 'https://www.coinhako.com', paymentMethods: ['Bank Transfer', 'PayNow'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+    { id: 'independent_reserve', name: 'Independent Reserve', url: 'https://www.independentreserve.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  AE: [
+    { id: 'rain_ae', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+    { id: 'bitoasis', name: 'BitOasis', url: 'https://bitoasis.net', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  GB: [
+    { id: 'revolut', name: 'Revolut', url: 'https://www.revolut.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  DE: [
+    { id: 'bitvavo', name: 'Bitvavo', url: 'https://bitvavo.com', paymentMethods: ['Bank Transfer', 'SEPA'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  VN: [
+    { id: 'remitano', name: 'Remitano', url: 'https://remitano.com', paymentMethods: ['Bank Transfer', 'P2P'], stablecoins: ['USDT', 'USDC'], hasP2P: true, type: 'local' },
+  ],
+  UA: [
+    { id: 'whitebit', name: 'WhiteBIT', url: 'https://whitebit.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  CO: [
+    { id: 'buda_co', name: 'Buda.com', url: 'https://www.buda.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  // Americas
+  CA: [
+    { id: 'newton', name: 'Newton', url: 'https://www.newton.co', paymentMethods: ['Interac e-Transfer', 'Wire Transfer'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+    { id: 'ndax', name: 'NDAX', url: 'https://ndax.io', paymentMethods: ['Interac e-Transfer', 'Wire Transfer'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  PE: [
+    { id: 'buda_pe', name: 'Buda.com', url: 'https://www.buda.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  CL: [
+    { id: 'buda_cl', name: 'Buda.com', url: 'https://www.buda.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  UY: [
+    { id: 'ripio_uy', name: 'Ripio', url: 'https://www.ripio.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  // Europe
+  ES: [
+    { id: 'bit2me', name: 'Bit2Me', url: 'https://bit2me.com', paymentMethods: ['SEPA', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  PT: [
+    { id: 'bit2me_pt', name: 'Bit2Me', url: 'https://bit2me.com', paymentMethods: ['SEPA', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  IT: [
+    { id: 'young_platform', name: 'Young Platform', url: 'https://youngplatform.com', paymentMethods: ['SEPA', 'Card'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  NL: [
+    { id: 'bitvavo_nl', name: 'Bitvavo', url: 'https://bitvavo.com', paymentMethods: ['SEPA', 'iDEAL', 'Card'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  FR: [
+    { id: 'paymium', name: 'Paymium', url: 'https://www.paymium.com', paymentMethods: ['SEPA', 'Card'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  AT: [
+    { id: 'bitpanda', name: 'Bitpanda', url: 'https://www.bitpanda.com', paymentMethods: ['SEPA', 'Card', 'SOFORT'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  CH: [
+    { id: 'bitcoin_suisse', name: 'Bitcoin Suisse', url: 'https://bitcoinsuisse.com', paymentMethods: ['Bank Transfer', 'SEPA'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  PL: [
+    { id: 'zondacrypto', name: 'zondacrypto', url: 'https://zondacrypto.com', paymentMethods: ['Bank Transfer', 'Card', 'SEPA'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  SE: [
+    { id: 'firi_se', name: 'Firi', url: 'https://firi.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  NO: [
+    { id: 'firi_no', name: 'Firi', url: 'https://firi.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  DK: [
+    { id: 'firi_dk', name: 'Firi', url: 'https://firi.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  FI: [
+    { id: 'coinmotion', name: 'Coinmotion', url: 'https://coinmotion.com', paymentMethods: ['Bank Transfer', 'SEPA'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  CZ: [
+    { id: 'anycoin', name: 'Anycoin', url: 'https://anycoin.cz', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  BY: [
+    { id: 'bynex', name: 'BYNEX', url: 'https://bynex.io', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  IL: [
+    { id: 'bits_of_gold', name: 'Bits of Gold', url: 'https://www.bitsofgold.co.il', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  GE: [
+    { id: 'cryptal', name: 'Cryptal', url: 'https://cryptal.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  // Asia-Pacific
+  HK: [
+    { id: 'hashkey', name: 'HashKey Exchange', url: 'https://www.hashkey.com', paymentMethods: ['Bank Transfer', 'FPS'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  TW: [
+    { id: 'max_exchange', name: 'MAX Exchange', url: 'https://max.maicoin.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+    { id: 'bitopro', name: 'BitoPro', url: 'https://www.bitopro.com', paymentMethods: ['Bank Transfer'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  NZ: [
+    { id: 'swyftx', name: 'Swyftx', url: 'https://swyftx.com/nz', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDC'], hasP2P: false, type: 'local' },
+  ],
+  KZ: [
+    { id: 'intebix', name: 'Intebix', url: 'https://intebix.kz', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT'], hasP2P: false, type: 'local' },
+  ],
+  // Middle East
+  SA: [
+    { id: 'rain_sa', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  BH: [
+    { id: 'rain_bh', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  QA: [
+    { id: 'rain_qa', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  KW: [
+    { id: 'rain_kw', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer', 'Card', 'KNET'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  JO: [
+    { id: 'rain_jo', name: 'Rain', url: 'https://www.rain.com', paymentMethods: ['Bank Transfer', 'Card'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  // Africa
+  TZ: [
+    { id: 'yellow_card_tz', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['Mobile Money', 'Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
+  UG: [
+    { id: 'yellow_card_ug', name: 'Yellow Card', url: 'https://yellowcard.io', paymentMethods: ['Mobile Money', 'Bank Transfer'], stablecoins: ['USDT', 'USDC'], hasP2P: false, type: 'local' },
+  ],
 };
 
 // Given a country name, find which global exchanges serve it

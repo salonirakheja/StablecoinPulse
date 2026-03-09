@@ -66,6 +66,7 @@ function HomeContent() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [premiumData, setPremiumData] = useState<PremiumApiResponse | null>(null);
   const [premiumLoading, setPremiumLoading] = useState(false);
+  const flyToCountry = searchParams.get('fly') || undefined;
 
   const navigateTo = useCallback((view: ActiveView, mode?: ViewMode) => {
     setActiveView(view);
@@ -214,6 +215,7 @@ function HomeContent() {
               filter={filter}
               viewMode={viewMode}
               onMapLoaded={() => setMapLoaded(true)}
+              flyToCountry={flyToCountry}
             />
           )}
         </div>

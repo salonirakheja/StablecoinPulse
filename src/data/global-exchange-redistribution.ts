@@ -112,7 +112,7 @@ const BINANCE: UserDistribution[] = [
 // OKX: originally Chinese, now global. Strong Asia + Europe presence
 const OKX: UserDistribution[] = [
   // Tier A — Chainalysis top 20
-  { country: 'China', share: 0.134 },
+  { country: 'China', share: 0.104 },
   { country: 'India', share: 0.043 },
   { country: 'Vietnam', share: 0.037 },
   { country: 'Turkey', share: 0.053 },
@@ -167,12 +167,34 @@ const OKX: UserDistribution[] = [
   { country: 'Bahrain', share: 0.001 },
   { country: 'Qatar', share: 0.001 },
   { country: 'New Zealand', share: 0.002 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Uruguay', share: 0.002 },
+  { country: 'Dominican Republic', share: 0.001 },
+  { country: 'Costa Rica', share: 0.001 },
+  { country: 'Guatemala', share: 0.001 },
+  { country: 'Uganda', share: 0.001 },
+  { country: 'Uzbekistan', share: 0.001 },
+  { country: 'Kenya', share: 0.003 },
+  { country: 'Israel', share: 0.003 },
+  { country: 'Switzerland', share: 0.003 },
+  { country: 'Norway', share: 0.002 },
+  { country: 'Belarus', share: 0.001 },
+  { country: 'Kuwait', share: 0.001 },
+  { country: 'Jordan', share: 0.001 },
 ];
 
 // MEXC: Asian-focused, strong China/Vietnam/India presence
 const MEXC: UserDistribution[] = [
   // Tier A
-  { country: 'China', share: 0.164 },
+  { country: 'China', share: 0.148 },
   { country: 'Vietnam', share: 0.077 },
   { country: 'India', share: 0.055 },
   { country: 'Indonesia', share: 0.044 },
@@ -220,12 +242,24 @@ const MEXC: UserDistribution[] = [
   { country: 'Georgia', share: 0.002 },
   { country: 'Ethiopia', share: 0.002 },
   { country: 'Czech Republic', share: 0.006 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Kenya', share: 0.003 },
+  { country: 'Israel', share: 0.002 },
+  { country: 'Norway', share: 0.002 },
 ];
 
 // Bybit: originally Singapore, moved to BVI. Strong Asia + Europe
 const BYBIT: UserDistribution[] = [
   // Tier A
-  { country: 'China', share: 0.091 },
+  { country: 'China', share: 0.061 },
   { country: 'India', share: 0.054 },
   { country: 'South Korea', share: 0.054 },
   { country: 'Vietnam', share: 0.043 },
@@ -282,12 +316,34 @@ const BYBIT: UserDistribution[] = [
   { country: 'Austria', share: 0.002 },
   { country: 'Qatar', share: 0.001 },
   { country: 'Bahrain', share: 0.003 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Uruguay', share: 0.002 },
+  { country: 'Dominican Republic', share: 0.001 },
+  { country: 'Costa Rica', share: 0.001 },
+  { country: 'Guatemala', share: 0.001 },
+  { country: 'Uganda', share: 0.001 },
+  { country: 'Uzbekistan', share: 0.001 },
+  { country: 'Kenya', share: 0.003 },
+  { country: 'Israel', share: 0.003 },
+  { country: 'Switzerland', share: 0.003 },
+  { country: 'Norway', share: 0.002 },
+  { country: 'Belarus', share: 0.001 },
+  { country: 'Kuwait', share: 0.001 },
+  { country: 'Jordan', share: 0.001 },
 ];
 
 // KuCoin: global, Asian-heavy
 const KUCOIN: UserDistribution[] = [
   // Tier A
-  { country: 'China', share: 0.111 },
+  { country: 'China', share: 0.086 },
   { country: 'Vietnam', share: 0.055 },
   { country: 'India', share: 0.055 },
   { country: 'Indonesia', share: 0.033 },
@@ -340,12 +396,32 @@ const KUCOIN: UserDistribution[] = [
   { country: 'New Zealand', share: 0.002 },
   { country: 'Bahrain', share: 0.001 },
   { country: 'Qatar', share: 0.003 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Uruguay', share: 0.001 },
+  { country: 'Dominican Republic', share: 0.001 },
+  { country: 'Costa Rica', share: 0.001 },
+  { country: 'Guatemala', share: 0.001 },
+  { country: 'Uganda', share: 0.001 },
+  { country: 'Kenya', share: 0.003 },
+  { country: 'Israel', share: 0.002 },
+  { country: 'Switzerland', share: 0.002 },
+  { country: 'Norway', share: 0.002 },
+  { country: 'Belarus', share: 0.001 },
+  { country: 'Kuwait', share: 0.001 },
 ];
 
 // Gate.io: Chinese roots, global
 const GATE: UserDistribution[] = [
   // Tier A
-  { country: 'China', share: 0.189 },
+  { country: 'China', share: 0.171 },
   { country: 'Vietnam', share: 0.056 },
   { country: 'India', share: 0.044 },
   { country: 'South Korea', share: 0.039 },
@@ -395,12 +471,25 @@ const GATE: UserDistribution[] = [
   { country: 'Czech Republic', share: 0.002 },
   { country: 'El Salvador', share: 0.001 },
   { country: 'Qatar', share: 0.003 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Kenya', share: 0.003 },
+  { country: 'Israel', share: 0.002 },
+  { country: 'Switzerland', share: 0.002 },
+  { country: 'Norway', share: 0.002 },
 ];
 
 // Bitget: Singapore-based, Asian-focused
 const BITGET: UserDistribution[] = [
   // Tier A
-  { country: 'China', share: 0.111 },
+  { country: 'China', share: 0.091 },
   { country: 'Vietnam', share: 0.056 },
   { country: 'India', share: 0.056 },
   { country: 'Turkey', share: 0.056 },
@@ -451,6 +540,21 @@ const BITGET: UserDistribution[] = [
   { country: 'Czech Republic', share: 0.002 },
   { country: 'El Salvador', share: 0.001 },
   { country: 'New Zealand', share: 0.002 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Kenya', share: 0.003 },
+  { country: 'Israel', share: 0.002 },
+  { country: 'Switzerland', share: 0.002 },
+  { country: 'Norway', share: 0.002 },
+  { country: 'Uruguay', share: 0.001 },
+  { country: 'Kuwait', share: 0.001 },
 ];
 
 // Bitfinex: institutional, Western + Asia
@@ -509,7 +613,7 @@ const BITFINEX: UserDistribution[] = [
 // HTX (formerly Huobi): Chinese roots
 const HUOBI: UserDistribution[] = [
   // Tier A
-  { country: 'China', share: 0.235 },
+  { country: 'China', share: 0.221 },
   { country: 'South Korea', share: 0.055 },
   { country: 'Japan', share: 0.038 },
   { country: 'Vietnam', share: 0.044 },
@@ -557,13 +661,25 @@ const HUOBI: UserDistribution[] = [
   { country: 'Georgia', share: 0.002 },
   { country: 'Ethiopia', share: 0.002 },
   { country: 'Czech Republic', share: 0.007 },
+  { country: 'Romania', share: 0.001 },
+  { country: 'Bulgaria', share: 0.001 },
+  { country: 'Croatia', share: 0.001 },
+  { country: 'Hungary', share: 0.001 },
+  { country: 'Greece', share: 0.001 },
+  { country: 'Denmark', share: 0.001 },
+  { country: 'Finland', share: 0.001 },
+  { country: 'Belgium', share: 0.001 },
+  { country: 'Serbia', share: 0.001 },
+  { country: 'Kenya', share: 0.002 },
+  { country: 'Israel', share: 0.002 },
+  { country: 'Norway', share: 0.001 },
 ];
 
 // Coinbase: US-based, publicly traded (COIN). Available in 100+ countries.
 // Sources: Coinbase 10-K filings, SimilarWeb traffic data, app store rankings
 // ~65% US, ~20% EU/UK, ~15% rest of world
 const COINBASE: UserDistribution[] = [
-  { country: 'United States', share: 0.640 },
+  { country: 'United States', share: 0.612 },
   { country: 'United Kingdom', share: 0.075 },
   { country: 'Germany', share: 0.055 },
   { country: 'France', share: 0.025 },
@@ -581,13 +697,24 @@ const COINBASE: UserDistribution[] = [
   { country: 'Turkey', share: 0.005 },
   { country: 'Switzerland', share: 0.005 },
   { country: 'Poland', share: 0.005 },
+  { country: 'Sweden', share: 0.003 },
+  { country: 'Austria', share: 0.003 },
+  { country: 'Portugal', share: 0.003 },
+  { country: 'Romania', share: 0.002 },
+  { country: 'Greece', share: 0.002 },
+  { country: 'Denmark', share: 0.003 },
+  { country: 'Belgium', share: 0.002 },
+  { country: 'Norway', share: 0.002 },
+  { country: 'Finland', share: 0.002 },
+  { country: 'New Zealand', share: 0.003 },
+  { country: 'Israel', share: 0.003 },
 ];
 
 // Kraken: US-headquartered, very strong European presence (especially DACH region).
 // Sources: Kraken regional availability pages, SimilarWeb traffic
 // ~45% US, ~35% EU/UK, ~20% rest
 const KRAKEN: UserDistribution[] = [
-  { country: 'United States', share: 0.440 },
+  { country: 'United States', share: 0.424 },
   { country: 'Germany', share: 0.085 },
   { country: 'United Kingdom', share: 0.065 },
   { country: 'Canada', share: 0.055 },
@@ -611,13 +738,18 @@ const KRAKEN: UserDistribution[] = [
   { country: 'Belgium', share: 0.005 },
   { country: 'Norway', share: 0.005 },
   { country: 'Finland', share: 0.005 },
+  { country: 'Romania', share: 0.002 },
+  { country: 'Greece', share: 0.003 },
+  { country: 'Denmark', share: 0.003 },
+  { country: 'New Zealand', share: 0.005 },
+  { country: 'Israel', share: 0.003 },
 ];
 
 // Crypto.com: Singapore HQ, global brand. Massive US marketing (Crypto.com Arena, F1).
 // Sources: SimilarWeb traffic, app store rankings, sponsorship market focus
 // ~25% Singapore/Asia, ~30% US, ~25% EU/UK, ~20% rest
 const CRYPTO_COM: UserDistribution[] = [
-  { country: 'United States', share: 0.290 },
+  { country: 'United States', share: 0.263 },
   { country: 'Singapore', share: 0.110 },
   { country: 'United Kingdom', share: 0.085 },
   { country: 'Australia', share: 0.070 },
@@ -640,6 +772,17 @@ const CRYPTO_COM: UserDistribution[] = [
   { country: 'Vietnam', share: 0.010 },
   { country: 'Malaysia', share: 0.005 },
   { country: 'Nigeria', share: 0.005 },
+  { country: 'Sweden', share: 0.003 },
+  { country: 'Austria', share: 0.003 },
+  { country: 'Portugal', share: 0.003 },
+  { country: 'Romania', share: 0.002 },
+  { country: 'Denmark', share: 0.003 },
+  { country: 'Belgium', share: 0.002 },
+  { country: 'Finland', share: 0.002 },
+  { country: 'Norway', share: 0.002 },
+  { country: 'New Zealand', share: 0.003 },
+  { country: 'Ireland', share: 0.002 },
+  { country: 'Greece', share: 0.002 },
 ];
 
 // Bitstamp: registered in Luxembourg for EU licensing. Oldest EU exchange.
@@ -647,7 +790,7 @@ const CRYPTO_COM: UserDistribution[] = [
 // Sources: company history, SimilarWeb traffic data
 // ~35% UK, ~35% EU, ~20% US, ~10% rest
 const BITSTAMP: UserDistribution[] = [
-  { country: 'United Kingdom', share: 0.200 },
+  { country: 'United Kingdom', share: 0.186 },
   { country: 'United States', share: 0.195 },
   { country: 'Germany', share: 0.100 },
   { country: 'France', share: 0.060 },
@@ -676,6 +819,12 @@ const BITSTAMP: UserDistribution[] = [
   { country: 'Hong Kong', share: 0.005 },
   { country: 'Czech Republic', share: 0.005 },
   { country: 'Greece', share: 0.005 },
+  { country: 'Romania', share: 0.002 },
+  { country: 'Bulgaria', share: 0.002 },
+  { country: 'Croatia', share: 0.002 },
+  { country: 'Hungary', share: 0.002 },
+  { country: 'Israel', share: 0.003 },
+  { country: 'New Zealand', share: 0.003 },
 ];
 
 // Map CoinGecko exchange IDs to their user distributions

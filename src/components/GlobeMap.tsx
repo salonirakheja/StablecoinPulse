@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState, useCallback } from 'react';
+import Link from 'next/link';
 import { MAP_CONFIG, FOG_CONFIG } from '@/lib/constants';
 import { VolumeApiResponse, StablecoinFilter, ViewMode } from '@/lib/types';
 import { useIsMobile } from '@/lib/useIsMobile';
@@ -11,12 +12,14 @@ import {
   REGULATION_LABELS,
   getRegulationByIso2,
 } from '@/data/stablecoin-regulations';
+import { COUNTRY_CENTROIDS } from '@/data/country-centroids';
 
 interface GlobeMapProps {
   initialData: VolumeApiResponse;
   filter: StablecoinFilter;
   viewMode: ViewMode;
   onMapLoaded?: () => void;
+  flyToCountry?: string; // ISO2 code to fly to on mount
 }
 
 function formatVolumeDetail(usd: number): string {
@@ -73,7 +76,7 @@ type SelectedCountryRegulation = {
 
 type SelectedCountryData = SelectedCountryVolume | SelectedCountryRegulation;
 
-export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }: GlobeMapProps) {
+export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded, flyToCountry }: GlobeMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
   const [hoveredCountry, setHoveredCountry] = useState<string | null>(null);
@@ -726,6 +729,23 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
     }
   }, [viewMode]);
 
+  // Fly to a country when flyToCountry prop is set
+  useEffect(() => {
+    if (!flyToCountry) return;
+    const map = mapRef.current;
+    if (!map || !map.isStyleLoaded()) return;
+
+    const centroid = COUNTRY_CENTROIDS.find((c) => c.iso2 === flyToCountry);
+    if (!centroid) return;
+
+    map.flyTo({
+      center: [centroid.lng, centroid.lat],
+      zoom: 4,
+      duration: 2000,
+      essential: true,
+    });
+  }, [flyToCountry]);
+
   // Render the appropriate detail card based on mode
   function renderDetailCard() {
     if (!selectedCountry) return null;
@@ -824,6 +844,17 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
                 {data.notes}
               </p>
             )}
+
+            {/* Country page link */}
+            <Link
+              href={`/country/${data.iso2}`}
+              className="flex items-center gap-1 mt-3 pt-2 border-t border-[rgba(0,245,255,0.08)] text-[10px] font-mono tracking-wider text-[#7070AA] hover:text-[#00F5FF] transition-colors"
+            >
+              VIEW COUNTRY PAGE
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
           </>
         ) : (
           <div className="text-center py-2">
@@ -916,7 +947,7 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
             {/* Stats grid */}
             <div className="grid grid-cols-2 gap-2">
               <div className="p-2 rounded-lg bg-[rgba(0,245,255,0.04)] border border-[rgba(0,245,255,0.08)]">
-                <p className="text-[8px] tracking-widest text-[#7070AA] uppercase">Exchanges</p>
+                <p className="text-[8px] tracking-widest text-[#7070AA] uppercase">Exchanges*</p>
                 <p className="text-sm font-mono text-[#E0E0FF] mt-0.5">{data.exchangeCount}</p>
               </div>
               <div className="p-2 rounded-lg bg-[rgba(0,245,255,0.04)] border border-[rgba(0,245,255,0.08)]">
@@ -924,6 +955,18 @@ export default function GlobeMap({ initialData, filter, viewMode, onMapLoaded }:
                 <p className="text-sm font-mono text-[#E0E0FF] mt-0.5 truncate">{data.topExchange}</p>
               </div>
             </div>
+            <p className="text-[7px] text-[#7070AA]/50 mt-1.5">*Contributing to volume. See country page for all available exchanges.</p>
+
+            {/* Country page link */}
+            <Link
+              href={`/country/${data.iso2}`}
+              className="flex items-center gap-1 mt-3 pt-2 border-t border-[rgba(0,245,255,0.08)] text-[10px] font-mono tracking-wider text-[#7070AA] hover:text-[#00F5FF] transition-colors"
+            >
+              VIEW COUNTRY PAGE
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
+            </Link>
           </>
         ) : (
           /* No data state */
