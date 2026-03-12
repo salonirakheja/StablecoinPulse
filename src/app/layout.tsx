@@ -55,19 +55,23 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
         {/* Server-rendered loading screen — visible instantly before JS downloads.
-            Only shows on the home page (globe). Hidden once React hydrates via LoadingScreen. */}
-        <div id="html-loader" aria-hidden="true">
-          <div style={{ position: 'relative' }}>
-            <div className="pulse" />
-            <div className="dot" />
-          </div>
-          <h1>STABLECOIN PULSE</h1>
-          <p>Mapping global stablecoin flows...</p>
-        </div>
-        <script dangerouslySetInnerHTML={{ __html: `
-          // Hide HTML loader immediately on non-home routes (they are server-rendered)
-          if(location.pathname!=='/') document.getElementById('html-loader').style.display='none';
-        `}} />
+            Only shows on the home page (globe). Hidden once React hydrates via LoadingScreen.
+            Uses dangerouslySetInnerHTML so React skips hydration (avoids mismatch when
+            the inline script hides it on non-home routes). */}
+        <div
+          id="html-loader"
+          aria-hidden="true"
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: `
+            <div style="position:relative">
+              <div class="pulse"></div>
+              <div class="dot"></div>
+            </div>
+            <h1>STABLECOIN PULSE</h1>
+            <p>Mapping global stablecoin flows...</p>
+            <script>if(location.pathname!=='/'){document.getElementById('html-loader').style.display='none'}</script>
+          `}}
+        />
         {children}
         <Analytics />
       </body>

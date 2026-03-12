@@ -305,6 +305,13 @@ function HomeContent() {
               <ViewModeToggle viewMode={viewMode} onViewModeChange={handleViewModeChange} inactive={activeView !== 'globe'} />
             </div>
             <a
+              href="/ratings"
+              className="px-3 py-1.5 max-md:px-2.5 rounded-lg text-[10px] md:text-xs font-mono tracking-wider backdrop-blur-md border transition-all duration-200 cursor-pointer border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)]"
+              style={{ background: 'rgba(5, 5, 25, 0.6)' }}
+            >
+              RATINGS
+            </a>
+            <a
               href="/compare"
               className="px-3 py-1.5 max-md:px-2.5 rounded-lg text-[10px] md:text-xs font-mono tracking-wider backdrop-blur-md border transition-all duration-200 cursor-pointer border-[rgba(0,245,255,0.15)] text-[#7070AA] hover:text-[#00F5FF] hover:border-[rgba(0,245,255,0.3)]"
               style={{ background: 'rgba(5, 5, 25, 0.6)' }}
