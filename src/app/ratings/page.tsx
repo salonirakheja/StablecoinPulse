@@ -63,11 +63,11 @@ function RatingCard({ rating, onExpand, isExpanded }: {
       {/* Header — always visible */}
       <button
         onClick={onExpand}
-        className="w-full px-5 py-4 flex items-center gap-4 cursor-pointer text-left"
+        className="w-full px-3 py-3 md:px-5 md:py-4 flex items-center gap-3 md:gap-4 cursor-pointer text-left"
       >
         {/* Grade badge */}
         <div
-          className="w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 border"
+          className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center flex-shrink-0 border"
           style={{
             background: `${gradeColor}12`,
             borderColor: `${gradeColor}30`,
@@ -87,12 +87,8 @@ function RatingCard({ rating, onExpand, isExpanded }: {
             <span className="text-base font-bold text-[#E0E0FF]">{rating.ticker}</span>
             <span className="text-xs text-[#7070AA]">{rating.name}</span>
           </div>
-          <div className="flex items-center gap-3 text-[10px] font-mono text-[#7070AA]">
-            <span>{rating.issuer}</span>
-            <span>·</span>
-            <span>{TYPE_LABELS[rating.type]}</span>
-            <span>·</span>
-            <span>{rating.marketCap}</span>
+          <div className="text-[10px] font-mono text-[#7070AA] truncate">
+            {rating.issuer} · {TYPE_LABELS[rating.type]} · {rating.marketCap}
           </div>
         </div>
 
@@ -115,7 +111,7 @@ function RatingCard({ rating, onExpand, isExpanded }: {
 
       {/* Expanded details */}
       {isExpanded && (
-        <div className="px-5 pb-5 border-t border-[rgba(0,245,255,0.06)]">
+        <div className="px-3 pb-4 md:px-5 md:pb-5 border-t border-[rgba(0,245,255,0.06)]">
           {/* Summary */}
           <p className="text-sm text-[#C0C0E0] leading-relaxed mt-4 mb-4">
             {rating.summary}
