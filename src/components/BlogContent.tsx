@@ -4,6 +4,14 @@ import Link from 'next/link';
 
 const posts = [
   {
+    slug: 'stablecoin-ratings-scoring-system',
+    title: 'Stablecoin Ratings: A Scoring System You Can Actually Check',
+    date: '2026-03-13',
+    description:
+      'We rated 14 stablecoins across 6 pillars with every score explained and every claim linked to its source. USDC got an A-. USDT got a C. Here\'s how the system works and what we found.',
+    readingTime: '8 min read',
+  },
+  {
     slug: 'do-bans-work-regulation-vs-stablecoin-volume',
     title: 'Do Bans Work? Regulation Status vs Stablecoin Volume Across 81 Countries',
     date: '2026-03-02',
