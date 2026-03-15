@@ -16,6 +16,14 @@ export const metadata: Metadata = {
 
 const posts = [
   {
+    slug: 'how-to-buy-usdt-nigeria-argentina-turkey',
+    title: 'How to Buy USDT in Nigeria, Argentina, and Turkey',
+    date: '2026-03-14',
+    description:
+      'A practical guide to buying USDT in three countries where stablecoins matter most. Which exchanges work, what to watch out for, and why people are buying in the first place.',
+    readingTime: '10 min read',
+  },
+  {
     slug: 'stablecoin-ratings-scoring-system',
     title: 'Stablecoin Ratings: A Scoring System You Can Actually Check',
     date: '2026-03-13',
