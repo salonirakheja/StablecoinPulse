@@ -308,18 +308,18 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         </div>
 
         {/* Stat cards — show premium/FX cards only when we have premium data */}
-        <div className={`grid grid-cols-2 ${premiumData ? 'md:grid-cols-4' : 'md:grid-cols-2'} gap-3 mb-8`}>
+        <div className={`grid grid-cols-2 ${premiumData ? 'md:grid-cols-4' : 'md:grid-cols-2'} gap-2 md:gap-3 mb-8`}>
           {/* Volume */}
           <div
-            className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+            className="rounded-xl px-3 py-2.5 md:px-4 md:py-3 border border-[rgba(0,245,255,0.12)]"
             style={{ background: 'rgba(5, 5, 25, 0.8)' }}
           >
             <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">24h Volume</div>
-            <div className="text-lg font-mono font-bold text-[#00F5FF]">
+            <div className="text-base md:text-lg font-mono font-bold text-[#00F5FF]">
               {volumeData ? formatVolume(volumeData.volumeUsd) : '—'}
             </div>
             {volumeData && (
-              <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+              <div className="text-[9px] font-mono text-[#7070AA] mt-0.5 truncate">
                 {volumeData.topExchange} + {volumeData.exchangeCount - 1} more
               </div>
             )}
@@ -328,12 +328,12 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           {/* Regulation status card (only when no premium data — fills the second slot) */}
           {!premiumData && regulation && (
             <div
-              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              className="rounded-xl px-3 py-2.5 md:px-4 md:py-3 border border-[rgba(0,245,255,0.12)]"
               style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
               <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">Regulation</div>
               <div
-                className="text-lg font-mono font-bold"
+                className="text-base md:text-lg font-mono font-bold"
                 style={{ color: REGULATION_COLORS[regulation.status] }}
               >
                 {REGULATION_LABELS[regulation.status]}
@@ -349,18 +349,18 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           {/* USDT premium — only when we have data */}
           {premiumData && (
             <div
-              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              className="rounded-xl px-3 py-2.5 md:px-4 md:py-3 border border-[rgba(0,245,255,0.12)]"
               style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
               <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">USDT Premium</div>
               <div
-                className="text-lg font-mono font-bold"
+                className="text-base md:text-lg font-mono font-bold"
                 style={{ color: getPremiumColor(premiumData.usdtPremiumPct) }}
               >
                 {formatPremium(premiumData.usdtPremiumPct)}
               </div>
               {premiumData.usdtP2PPrice && (
-                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5 truncate">
                   P2P: {premiumData.usdtP2PPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })} {premiumData.fiat}
                 </div>
               )}
@@ -370,18 +370,18 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           {/* USDC premium — only when we have data */}
           {premiumData && (
             <div
-              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              className="rounded-xl px-3 py-2.5 md:px-4 md:py-3 border border-[rgba(0,245,255,0.12)]"
               style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
               <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">USDC Premium</div>
               <div
-                className="text-lg font-mono font-bold"
+                className="text-base md:text-lg font-mono font-bold"
                 style={{ color: getPremiumColor(premiumData.usdcPremiumPct) }}
               >
                 {formatPremium(premiumData.usdcPremiumPct)}
               </div>
               {premiumData.usdcP2PPrice && (
-                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5 truncate">
                   P2P: {premiumData.usdcP2PPrice.toLocaleString('en-US', { maximumFractionDigits: 2 })} {premiumData.fiat}
                 </div>
               )}
@@ -391,12 +391,12 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           {/* Currency depreciation — only when we have data */}
           {premiumData && (
             <div
-              className="rounded-xl px-4 py-3 border border-[rgba(0,245,255,0.12)]"
+              className="rounded-xl px-3 py-2.5 md:px-4 md:py-3 border border-[rgba(0,245,255,0.12)]"
               style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
               <div className="text-[9px] font-mono tracking-wider text-[#7070AA] uppercase mb-1">FX vs USD (12M)</div>
               <div
-                className="text-lg font-mono font-bold"
+                className="text-base md:text-lg font-mono font-bold"
                 style={{ color: getDepreciationColor(premiumData.depreciation12m) }}
               >
                 {premiumData.depreciation12m !== null && premiumData.depreciation12m !== undefined
@@ -404,7 +404,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
                   : '—'}
               </div>
               {premiumData.officialRate && premiumCountry && (
-                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5">
+                <div className="text-[9px] font-mono text-[#7070AA] mt-0.5 truncate">
                   $1 = {premiumData.officialRate.toLocaleString('en-US', { maximumFractionDigits: premiumData.officialRate >= 100 ? 0 : 2 })} {premiumCountry.fiat}
                 </div>
               )}
@@ -415,14 +415,15 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         {/* Regulation section */}
         {regulation && (
           <section
-            className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+            className="rounded-xl px-4 py-3 md:px-5 md:py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
             style={{ background: 'rgba(5, 5, 25, 0.8)' }}
           >
             <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-3">Regulation</h2>
             <p className="text-sm leading-relaxed text-[#C0C0E0] mb-3">{regulation.summary}</p>
             {regulation.keyLaw && (
-              <div className="flex items-center gap-2 text-xs font-mono text-[#7070AA] mb-2">
-                <span className="text-[#E0E0FF]">Key law:</span> {regulation.keyLaw}
+              <div className="flex items-start gap-2 text-xs font-mono text-[#7070AA] mb-2">
+                <span className="text-[#E0E0FF] flex-shrink-0">Key law:</span>
+                <span className="break-words">{regulation.keyLaw}</span>
               </div>
             )}
             {regulation.notes && (
@@ -439,7 +440,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
           if (matched.length === 0) return null;
           return (
             <section
-              className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+              className="rounded-xl px-4 py-3 md:px-5 md:py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
               style={{ background: 'rgba(5, 5, 25, 0.8)' }}
             >
               <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-3">
@@ -453,7 +454,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
                     <Link
                       key={rating.id}
                       href="/ratings"
-                      className="flex items-center gap-3 p-2.5 rounded-lg border border-[rgba(0,245,255,0.08)] hover:border-[rgba(0,245,255,0.25)] transition-colors group"
+                      className="flex items-center gap-3 p-2.5 rounded-lg border border-[rgba(0,245,255,0.08)] hover:border-[rgba(0,245,255,0.25)] active:border-[rgba(0,245,255,0.25)] transition-colors group"
                       style={{ background: 'rgba(0,245,255,0.02)' }}
                     >
                       <div
@@ -496,7 +497,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         {/* Regulatory timeline */}
         {timeline.length > 0 && (
           <section
-            className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+            className="rounded-xl px-4 py-3 md:px-5 md:py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
             style={{ background: 'rgba(5, 5, 25, 0.8)' }}
           >
             <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-4">
@@ -534,7 +535,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         {/* Why this matters (premium driver) */}
         {driver && (
           <section
-            className="rounded-xl px-5 py-4 mb-6 border"
+            className="rounded-xl px-4 py-3 md:px-5 md:py-4 mb-6 border"
             style={{
               background: `${driver.color}08`,
               borderColor: `${driver.color}25`,
@@ -558,7 +559,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         {/* How to buy stablecoins */}
         {exchanges.length > 0 && (
           <section
-            className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+            className="rounded-xl px-4 py-3 md:px-5 md:py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
             style={{ background: 'rgba(5, 5, 25, 0.8)' }}
           >
             <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-4">
@@ -571,7 +572,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
                   href={ex.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-start gap-3 p-3 rounded-lg border border-[rgba(0,245,255,0.08)] hover:border-[rgba(0,245,255,0.25)] transition-colors group"
+                  className="flex items-start gap-3 p-3 md:p-3.5 rounded-lg border border-[rgba(0,245,255,0.08)] hover:border-[rgba(0,245,255,0.25)] active:border-[rgba(0,245,255,0.25)] transition-colors group"
                   style={{ background: 'rgba(0,245,255,0.02)' }}
                 >
                   <div className="flex-1 min-w-0">
@@ -623,7 +624,7 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
         {/* On-chain breakdown */}
         {chainShares.length > 0 && (
           <section
-            className="rounded-xl px-5 py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
+            className="rounded-xl px-4 py-3 md:px-5 md:py-4 mb-6 border border-[rgba(0,245,255,0.12)]"
             style={{ background: 'rgba(5, 5, 25, 0.8)' }}
           >
             <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-4">
