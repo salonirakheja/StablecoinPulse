@@ -19,6 +19,7 @@ import { aggregateByCountry } from '@/lib/aggregator';
 import { calibrateWithLiveData } from '@/data/stablecoin-weights';
 import type { CountryVolume } from '@/lib/types';
 import BackgroundGrid from '@/components/BackgroundGrid';
+import CountryTrends from '@/components/CountryTrends';
 
 export const revalidate = 900;
 
@@ -411,6 +412,9 @@ export default async function CountryPage({ params }: { params: Promise<{ iso2: 
             </div>
           )}
         </div>
+
+        {/* 7-day trends (sparklines from daily snapshots) */}
+        <CountryTrends iso2={code} />
 
         {/* Regulation section */}
         {regulation && (
