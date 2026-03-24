@@ -15,6 +15,7 @@ interface TrendData {
   points: HistoryPoint[];
   volumeTrend: number | null;   // % change over period
   premiumTrend: number | null;
+  usdcPremiumTrend: number | null;
 }
 
 function Sparkline({ values, color, height = 32, width = 80 }: { values: number[]; color: string; height?: number; width?: number }) {
@@ -109,14 +110,21 @@ export default function CountryTrends({ iso2 }: { iso2: string }) {
           if (first > 0) volumeTrend = ((last - first) / first) * 100;
         }
 
-        // Premium trend
+        // USDT Premium trend
         const premiumValues = points.filter((p: HistoryPoint) => p.usdtPremiumPct !== null).map((p: HistoryPoint) => p.usdtPremiumPct as number);
         let premiumTrend: number | null = null;
         if (premiumValues.length >= 2) {
           premiumTrend = premiumValues[premiumValues.length - 1] - premiumValues[0];
         }
 
-        setData({ points, volumeTrend, premiumTrend });
+        // USDC Premium trend
+        const usdcValues = points.filter((p: HistoryPoint) => p.usdcPremiumPct !== null).map((p: HistoryPoint) => p.usdcPremiumPct as number);
+        let usdcPremiumTrend: number | null = null;
+        if (usdcValues.length >= 2) {
+          usdcPremiumTrend = usdcValues[usdcValues.length - 1] - usdcValues[0];
+        }
+
+        setData({ points, volumeTrend, premiumTrend, usdcPremiumTrend });
       } catch {
         setData(null);
       } finally {
@@ -137,10 +145,15 @@ export default function CountryTrends({ iso2 }: { iso2: string }) {
     .filter((p) => p.usdtPremiumPct !== null)
     .map((p) => p.usdtPremiumPct as number);
 
+  const usdcPremiumValues = data.points
+    .filter((p) => p.usdcPremiumPct !== null)
+    .map((p) => p.usdcPremiumPct as number);
+
   const hasVolume = volumeValues.length >= 2;
   const hasPremium = premiumValues.length >= 2;
+  const hasUsdcPremium = usdcPremiumValues.length >= 2;
 
-  if (!hasVolume && !hasPremium) return null;
+  if (!hasVolume && !hasPremium && !hasUsdcPremium) return null;
 
   return (
     <div
@@ -150,7 +163,7 @@ export default function CountryTrends({ iso2 }: { iso2: string }) {
       <h2 className="text-[10px] font-mono tracking-[0.2em] text-[#7070AA] uppercase mb-3">
         7-Day Trends
       </h2>
-      <div className={`grid ${hasVolume && hasPremium ? 'grid-cols-2' : 'grid-cols-1'} gap-4`}>
+      <div className={`grid grid-cols-1 ${hasVolume && (hasPremium || hasUsdcPremium) ? 'md:grid-cols-3' : hasPremium && hasUsdcPremium ? 'md:grid-cols-2' : ''} gap-4`}>
         {hasVolume && (
           <div>
             <div className="flex items-center justify-between mb-1">
@@ -171,6 +184,19 @@ export default function CountryTrends({ iso2 }: { iso2: string }) {
               {data.premiumTrend !== null && <TrendArrow pct={data.premiumTrend} />}
             </div>
             <Sparkline values={premiumValues} color="#FFB800" />
+            <div className="flex justify-between mt-1">
+              <span className="text-[8px] font-mono text-[#7070AA]">{data.points[0].date.slice(5)}</span>
+              <span className="text-[8px] font-mono text-[#7070AA]">{data.points[data.points.length - 1].date.slice(5)}</span>
+            </div>
+          </div>
+        )}
+        {hasUsdcPremium && (
+          <div>
+            <div className="flex items-center justify-between mb-1">
+              <span className="text-[10px] font-mono text-[#7070AA]">USDC Premium</span>
+              {data.usdcPremiumTrend !== null && <TrendArrow pct={data.usdcPremiumTrend} />}
+            </div>
+            <Sparkline values={usdcPremiumValues} color="#627EEA" />
             <div className="flex justify-between mt-1">
               <span className="text-[8px] font-mono text-[#7070AA]">{data.points[0].date.slice(5)}</span>
               <span className="text-[8px] font-mono text-[#7070AA]">{data.points[data.points.length - 1].date.slice(5)}</span>
